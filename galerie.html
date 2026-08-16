@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fotogalerie — TTC Bystřice</title>
+<meta name="description" content="Fotogalerie TTC Bystřice — fotky z tréninků a zápasů.">
+<link rel="icon" type="image/jpeg" href="images/Logo.jpg">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="container nav">
+    <a href="index.html" class="brand">
+      <img src="images/Logo.jpg" alt="Logo TTC Bystřice">
+      <span class="brand__name">TTC Bystřice<span>Oddíl stolního tenisu · od 2007</span></span>
+    </a>
+    <button class="nav__toggle" aria-label="Otevřít menu"><span></span><span></span><span></span></button>
+    <nav>
+      <ul class="nav__list">
+        <li><a href="index.html">Domů</a></li>
+        <li><a href="index.html#aktuality">Aktuality</a></li>
+        <li><a href="index.html#vysledky">Výsledky</a></li>
+        <li class="nav__dropdown">
+          <a href="index.html#tymy">Týmy ▾</a>
+          <div class="nav__dropdown-menu">
+            <a href="tym-a.html">Tým A — Okresní přebor</a>
+            <a href="tym-b.html">Tým B — OS 1. třídy</a>
+            <a href="tym-c.html">Tým C — OS 4. třídy</a>
+            <a href="tym-d.html">Tým D — OS 5. třídy</a>
+          </div>
+        </li>
+        <li><a href="galerie.html" class="active">Galerie</a></li>
+        <li><a href="index.html#kontakt">Kontakt</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<section class="team-hero">
+  <div class="container">
+    <div class="breadcrumb"><a href="index.html">Domů</a> / Fotogalerie</div>
+    <h1>Fotogalerie</h1>
+    <p style="margin:0;max-width:640px">Fotky z tréninků, zápasů a klubových akcí TTC Bystřice.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+
+    <!--
+      JAK PŘIDAT NOVÉ FOTKY (pro správce webu):
+      1. Nahraj obrázek do složky images/galerie/ (např. images/galerie/2026-09-zapas-a.jpg).
+      2. Zkopíruj jeden blok <figure class="gallery-item">...</figure> níže a uprav mu
+         cestu k obrázku (src), popisek (alt) a text v <figcaption>.
+      3. Smaž nebo nech beze změny <div class="gallery-empty">, pokud už nějaké fotky přidáváš poprvé.
+
+      Ukázkový blok:
+      <figure class="gallery-item">
+        <img src="images/galerie/nazev-souboru.jpg" alt="Popis fotky">
+        <figcaption>Trénink — srpen 2026</figcaption>
+      </figure>
+    -->
+
+    <div class="gallery-grid">
+      <div class="gallery-empty">
+        <strong>Galerie zatím čeká na první fotky</strong>
+        Jakmile proběhne trénink nebo zápas, přidejte sem fotky podle návodu v HTML kódu této stránky
+        (složka <code>images/galerie/</code>) — tady se pak zobrazí jako klikací náhledy.
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="lightbox" id="lightbox">
+  <button class="lightbox__close" aria-label="Zavřít">&times;</button>
+  <img src="" alt="">
+</div>
+
+<footer class="site">
+  <div class="container">
+    <div class="footer__grid">
+      <div>
+        <div class="footer__brand">
+          <img src="images/Logo.jpg" alt="Logo TTC Bystřice">
+          <strong style="color:var(--white)">TTC Bystřice</strong>
+        </div>
+        <p>Oddíl stolního tenisu, založen 2007.<br>Bystřice nad Olší, okres Frýdek-Místek.</p>
+      </div>
+      <div>
+        <h4>Kontakt</h4>
+        <p>Organizační pracovník oddílu: Tomáš Bruk</p>
+        <a href="mailto:ttc.bystrice@seznam.cz">ttc.bystrice@seznam.cz</a>
+        <a href="tel:+420773168698">+420 773 168 698</a>
+        <a href="http://ttc-bystrice.cz" target="_blank" rel="noopener">ttc-bystrice.cz</a>
+      </div>
+      <div>
+        <h4>Naše týmy</h4>
+        <a href="tym-a.html">Tým A — Okresní přebor</a>
+        <a href="tym-b.html">Tým B — OS 1. třídy</a>
+        <a href="tym-c.html">Tým C — OS 4. třídy</a>
+        <a href="tym-d.html">Tým D — OS 5. třídy</a>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      © 2026 TTC Bystřice — data o soutěžích: <a href="https://stis.ping-pong.cz/" target="_blank" rel="noopener">STIS ČAST</a>
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

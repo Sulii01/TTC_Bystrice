@@ -1,0 +1,507 @@
+/* ==========================================================================
+   TTC Bystřice — hlavní styl
+   Barevná paleta vychází z klubového loga a banneru (žlutá / černá / červená)
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Rajdhani:wght@500;600;700&display=swap');
+
+:root{
+  --bg:            #0c0c0b;
+  --bg-alt:        #151412;
+  --card:          #1b1a17;
+  --card-border:   #302c22;
+  --yellow:        #f7c600;
+  --yellow-dark:   #c99e00;
+  --red:           #d9202f;
+  --black:         #050505;
+  --white:         #f5f4ef;
+  --grey:          #b7b3a8;
+  --grey-dark:     #8a867c;
+  --radius:        10px;
+  --shadow:        0 10px 30px rgba(0,0,0,.45);
+  --maxw:          1180px;
+  font-size: 19px; /* základní velikost textu celého webu — zvyšte/snižte toto číslo a přeškáluje se skoro vše */
+}
+
+*, *::before, *::after{ box-sizing: border-box; }
+
+html{ scroll-behavior: smooth; }
+
+body{
+  margin: 0;
+  background: var(--bg);
+  color: var(--white);
+  font-family: 'Rajdhani', 'Segoe UI', Arial, sans-serif;
+  font-size: 1.15rem;
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4, .brand__name, .btn, nav a, .team-card__name{
+  font-family: 'Oswald', 'Segoe UI', Arial, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: .02em;
+}
+
+h1, h2, h3{ color: var(--yellow); margin: 0 0 .6em; }
+h1{ font-size: clamp(1.9rem, 4vw, 3rem); }
+h2{ font-size: clamp(1.4rem, 3vw, 2rem); }
+h3{ font-size: 1.15rem; color: var(--white); }
+
+p{ color: var(--grey); }
+
+a{ color: var(--yellow); text-decoration: none; }
+a:hover{ color: var(--white); }
+
+img{ max-width: 100%; display: block; }
+
+.container{
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.section{ padding: 64px 0; }
+.section--alt{ background: var(--bg-alt); }
+.section__head{
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  border-bottom: 2px solid var(--card-border);
+  padding-bottom: 14px;
+  margin-bottom: 32px;
+}
+.section__head h2{ margin: 0; }
+.section__head h2::before{
+  content: "";
+  display: inline-block;
+  width: 10px; height: 10px;
+  background: var(--red);
+  margin-right: 12px;
+  transform: rotate(45deg);
+  vertical-align: middle;
+}
+
+/* ---------- Buttons ---------- */
+.btn{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 22px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: .92rem;
+  border: 2px solid var(--yellow);
+  color: var(--black);
+  background: var(--yellow);
+  cursor: pointer;
+  transition: all .18s ease;
+}
+.btn:hover{ background: var(--white); border-color: var(--white); color: var(--black); }
+.btn--ghost{ background: transparent; color: var(--yellow); }
+.btn--ghost:hover{ background: var(--yellow); color: var(--black); }
+.btn--sm{ padding: 7px 14px; font-size: .8rem; }
+
+/* ---------- Header / nav ---------- */
+header.site{
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(10,10,9,.94);
+  border-bottom: 3px solid var(--yellow);
+  backdrop-filter: blur(4px);
+}
+.nav{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0;
+}
+.brand{ display: flex; align-items: center; gap: 14px; }
+.brand img{ height: 82px; width: auto; } /* velikost loga v hlavičce — změňte tuto výšku */
+.brand__name{ font-size: 1.3rem; font-weight: 700; color: var(--white); line-height: 1.1; }
+.brand__name span{ display:block; font-size: .68rem; color: var(--yellow); font-weight:500; letter-spacing: .12em; }
+
+.nav__toggle{
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+}
+.nav__toggle span{ width: 26px; height: 3px; background: var(--yellow); display:block; }
+
+.nav__list{
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  list-style: none;
+  margin: 0; padding: 0;
+}
+.nav__list a{
+  color: var(--white);
+  font-size: .88rem;
+  font-weight: 600;
+  padding: 10px 14px;
+  display: block;
+  border-radius: 4px;
+}
+.nav__list a:hover, .nav__list a.active{ color: var(--black); background: var(--yellow); }
+
+.nav__dropdown{ position: relative; }
+.nav__dropdown-menu{
+  display: none;
+  position: absolute;
+  top: 100%; left: 0;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-top: 3px solid var(--yellow);
+  min-width: 190px;
+  box-shadow: var(--shadow);
+  padding: 6px;
+  border-radius: 0 0 6px 6px;
+}
+.nav__dropdown:hover .nav__dropdown-menu,
+.nav__dropdown:focus-within .nav__dropdown-menu{ display: block; }
+.nav__dropdown-menu a{ padding: 9px 12px; border-radius: 4px; }
+.nav__dropdown-menu a:hover{ background: var(--yellow); color: var(--black); }
+
+/* ---------- Hero ---------- */
+.hero{
+  position: relative;
+  background: linear-gradient(180deg, rgba(5,5,5,.35) 0%, rgba(5,5,5,.85) 78%, var(--bg) 100%),
+              url('../images/Banner.jpg') center/cover no-repeat;
+  padding: 110px 0 70px;
+  text-align: center;
+  border-bottom: 3px solid var(--yellow);
+}
+.hero__eyebrow{
+  color: var(--yellow);
+  font-family: 'Oswald', sans-serif;
+  letter-spacing: .25em;
+  font-size: .8rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+.hero h1{
+  margin: 0 0 14px;
+  color: var(--white);
+  text-shadow: 0 4px 18px rgba(0,0,0,.6);
+}
+.hero h1 em{ color: var(--yellow); font-style: normal; }
+.hero p{ max-width: 620px; margin: 0 auto 28px; color: var(--grey); font-size: 1.05rem; }
+.hero__actions{ display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+/* ---------- Cards / grid ---------- */
+.grid{ display: grid; gap: 22px; }
+.grid--2{ grid-template-columns: repeat(auto-fit, minmax(320px,1fr)); }
+.grid--3{ grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); }
+.grid--4{ grid-template-columns: repeat(auto-fit, minmax(230px,1fr)); }
+
+.card{
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow);
+}
+
+/* news */
+.news-card{
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-left: 4px solid var(--red);
+  border-radius: var(--radius);
+  padding: 22px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.news-card__date{
+  color: var(--yellow);
+  font-family: 'Oswald', sans-serif;
+  font-size: .78rem;
+  font-weight: 600;
+  letter-spacing: .08em;
+}
+.news-card h3{ margin: 0; }
+.news-card p{ margin: 0; font-size: .95rem; }
+.tag{
+  display: inline-block;
+  align-self: flex-start;
+  background: var(--yellow);
+  color: var(--black);
+  font-family:'Oswald',sans-serif;
+  font-size: .68rem;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 3px;
+  letter-spacing: .06em;
+  margin-bottom: 4px;
+}
+
+/* upcoming match */
+.match-card{
+  background: linear-gradient(135deg, var(--card) 0%, var(--bg-alt) 100%);
+  border: 1px solid var(--card-border);
+  border-top: 4px solid var(--yellow);
+  border-radius: var(--radius);
+  padding: 30px;
+  text-align: center;
+}
+.match-card__comp{ color: var(--yellow); font-size: .82rem; font-weight: 700; letter-spacing: .1em; font-family:'Oswald',sans-serif; margin-bottom: 18px; }
+.match-card__teams{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+.match-card__team{ font-size: 1.3rem; font-weight: 700; color: var(--white); font-family:'Oswald',sans-serif; }
+.match-card__vs{
+  color: var(--black);
+  background: var(--red);
+  border-radius: 50%;
+  width: 42px; height: 42px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-family:'Oswald',sans-serif; font-size: .85rem;
+}
+.match-card__meta{ color: var(--grey); font-size: .92rem; }
+.match-card__empty{ color: var(--grey); font-size: 1rem; padding: 10px 0 20px; }
+
+/* team cards */
+.team-card{
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform .18s ease, border-color .18s ease;
+}
+.team-card:hover{ transform: translateY(-5px); border-color: var(--yellow); }
+.team-card__badge{
+  background: var(--yellow);
+  color: var(--black);
+  font-family: 'Oswald', sans-serif;
+  font-weight: 700;
+  font-size: 2.2rem;
+  padding: 22px 0;
+  text-align: center;
+}
+.team-card__body{ padding: 20px; flex: 1; display: flex; flex-direction: column; gap: 8px; }
+.team-card__name{ font-size: 1.05rem; color: var(--white); margin: 0; }
+.team-card__comp{ color: var(--grey); font-size: .88rem; }
+.team-card__link{ margin-top: auto; font-weight: 600; font-size: .85rem; }
+
+/* result cards (výsledky posledních zápasů) */
+.result-card{
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 20px;
+  text-align: center;
+}
+.result-card__team{ color: var(--yellow); font-family:'Oswald',sans-serif; font-size:.8rem; font-weight:700; letter-spacing:.08em; margin-bottom: 10px; }
+.result-card__score{ font-family:'Oswald',sans-serif; font-size: 1.5rem; font-weight: 700; color: var(--white); margin-bottom: 6px; }
+.result-card__meta{ font-size: .82rem; color: var(--grey-dark); }
+.result-card__empty{ color: var(--grey); font-size: .92rem; padding: 8px 0; }
+
+/* ---------- Fotogalerie ---------- */
+.gallery-grid{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px,1fr));
+  gap: 16px;
+}
+.gallery-item{
+  position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--card-border);
+  aspect-ratio: 4/3;
+  cursor: pointer;
+  background: var(--card);
+}
+.gallery-item img{ width:100%; height:100%; object-fit: cover; transition: transform .25s ease; }
+.gallery-item:hover img{ transform: scale(1.08); }
+.gallery-item figcaption{
+  position:absolute; left:0; right:0; bottom:0;
+  background: linear-gradient(0deg, rgba(0,0,0,.85), rgba(0,0,0,0));
+  color: var(--white);
+  font-size: .8rem;
+  padding: 22px 10px 8px;
+}
+.gallery-empty{
+  grid-column: 1 / -1;
+  padding: 40px 24px;
+  text-align: center;
+  color: var(--grey);
+  background: var(--card);
+  border: 1px dashed var(--card-border);
+  border-radius: var(--radius);
+}
+.gallery-empty strong{ display:block; color: var(--yellow); font-family:'Oswald',sans-serif; margin-bottom: 8px; }
+
+.lightbox{
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(5,5,5,.92);
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+}
+.lightbox.open{ display: flex; }
+.lightbox img{ max-width: 100%; max-height: 85vh; border-radius: 6px; box-shadow: var(--shadow); }
+.lightbox__close{
+  position: absolute; top: 22px; right: 30px;
+  color: var(--yellow); font-size: 2.2rem; line-height: 1;
+  cursor: pointer; background:none; border:none;
+}
+
+/* ---------- Tables ---------- */
+.table-wrap{ overflow-x: auto; border-radius: var(--radius); border: 1px solid var(--card-border); }
+table.tabulka{
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--card);
+  font-size: .92rem;
+  min-width: 560px;
+}
+table.tabulka caption{ display:none; }
+table.tabulka th{
+  background: var(--yellow);
+  color: var(--black);
+  font-family: 'Oswald', sans-serif;
+  text-transform: uppercase;
+  font-size: .75rem;
+  letter-spacing: .05em;
+  padding: 12px 10px;
+  text-align: left;
+  white-space: nowrap;
+}
+table.tabulka td{
+  padding: 11px 10px;
+  border-bottom: 1px solid var(--card-border);
+  color: var(--white);
+  white-space: nowrap;
+}
+table.tabulka tbody tr:hover{ background: rgba(247,198,0,.06); }
+table.tabulka tr.tabulka--nas{ background: rgba(247,198,0,.12); }
+table.tabulka tr.tabulka--nas td:first-child{ border-left: 3px solid var(--yellow); }
+.empty-note{
+  padding: 22px;
+  text-align: center;
+  color: var(--grey);
+  background: var(--card);
+  border: 1px dashed var(--card-border);
+  border-radius: var(--radius);
+}
+.empty-note strong{ color: var(--yellow); display:block; margin-bottom:6px; font-family:'Oswald',sans-serif; }
+
+/* ---------- Team detail page ---------- */
+.team-hero{
+  background: linear-gradient(120deg, var(--bg-alt) 0%, var(--bg) 100%);
+  border-bottom: 3px solid var(--yellow);
+  padding: 46px 0 34px;
+}
+.breadcrumb{ font-size: .82rem; color: var(--grey-dark); margin-bottom: 14px; }
+.breadcrumb a{ color: var(--grey); }
+.team-hero__row{ display:flex; align-items:center; gap:22px; flex-wrap:wrap; }
+.team-hero__letter{
+  width: 84px; height: 84px;
+  background: var(--yellow);
+  color: var(--black);
+  font-family: 'Oswald', sans-serif;
+  font-weight: 700;
+  font-size: 2.6rem;
+  display:flex; align-items:center; justify-content:center;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+.team-hero__info h1{ margin: 0 0 6px; }
+.pill-row{ display:flex; gap:8px; flex-wrap:wrap; }
+.pill{
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  color: var(--grey);
+  font-size: .78rem;
+  padding: 5px 12px;
+  border-radius: 20px;
+}
+.pill strong{ color: var(--yellow); }
+
+.info-list{ list-style: none; margin: 0; padding: 0; }
+.info-list li{
+  display:flex; justify-content: space-between; gap: 14px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--card-border);
+  font-size: .92rem;
+}
+.info-list li:last-child{ border-bottom: none; }
+.info-list span:first-child{ color: var(--grey-dark); }
+.info-list span:last-child{ color: var(--white); text-align: right; }
+
+.roster-table{ width:100%; border-collapse: collapse; }
+.roster-table th, .roster-table td{ padding: 10px; border-bottom: 1px solid var(--card-border); text-align:left; font-size: .9rem; }
+.roster-table th{ color: var(--yellow); font-family:'Oswald',sans-serif; font-size:.72rem; text-transform:uppercase; letter-spacing:.05em; }
+
+.teamnav{ display:flex; gap:10px; flex-wrap:wrap; margin: 30px 0 6px; }
+.teamnav a{
+  border:1px solid var(--card-border);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--grey);
+}
+.teamnav a.active, .teamnav a:hover{ background: var(--yellow); color: var(--black); border-color: var(--yellow); }
+
+/* ---------- Footer ---------- */
+footer.site{
+  background: var(--black);
+  border-top: 3px solid var(--yellow);
+  padding: 46px 0 22px;
+  margin-top: 40px;
+}
+.footer__grid{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 30px;
+  margin-bottom: 28px;
+}
+.footer__grid h4{ color: var(--yellow); font-family:'Oswald',sans-serif; font-size:.9rem; text-transform:uppercase; letter-spacing:.06em; margin: 0 0 14px;}
+.footer__grid p, .footer__grid a{ color: var(--grey); font-size: .9rem; display:block; margin-bottom:6px;}
+.footer__grid a:hover{ color: var(--yellow); }
+.footer__brand{ display:flex; gap:12px; align-items:center; margin-bottom: 12px;}
+.footer__brand img{ height: 64px; } /* velikost loga v patičce — změňte tuto výšku */
+.footer__bottom{
+  border-top: 1px solid #232120;
+  padding-top: 18px;
+  text-align: center;
+  color: var(--grey-dark);
+  font-size: .8rem;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 860px){
+  .nav__toggle{ display: flex; }
+  .nav__list{
+    position: absolute;
+    top: 100%; left: 0; right: 0;
+    background: var(--bg-alt);
+    border-bottom: 3px solid var(--yellow);
+    flex-direction: column;
+    align-items: stretch;
+    display: none;
+    padding: 8px;
+  }
+  .nav__list.open{ display: flex; }
+  .nav__dropdown-menu{ position: static; border: none; display: none; padding-left: 14px; }
+  .nav__dropdown.open .nav__dropdown-menu{ display: block; }
+  .hero{ padding: 90px 0 50px; }
+}
