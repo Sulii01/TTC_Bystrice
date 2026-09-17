@@ -1,11 +1,11 @@
 name: Aktualizace dat ze STIS
 
 # Kdy se skript spouští:
-#  1) automaticky každou neděli ve 20:00 UTC (cca 21-22 hodin našeho času)
+#  1) automaticky v pondělí, středu, pátek a neděli ve 20:00 UTC (cca 21-22 hodin našeho času)
 #  2) kdykoliv ručně tlačítkem "Run workflow" na GitHubu (záložka Actions)
 on:
   schedule:
-    - cron: '0 20 * * 0'
+    - cron: '0 20 * * 0,1,3,5'
   workflow_dispatch: {}
 
 # Aby mohl workflow commitnout a pushnout změny zpět do repozitáře
