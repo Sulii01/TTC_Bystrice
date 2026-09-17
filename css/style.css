@@ -273,6 +273,15 @@ header.site{
 .match-card__meta{ color: var(--grey); font-size: .92rem; }
 .match-card__empty{ color: var(--grey); font-size: 1rem; padding: 10px 0 20px; }
 
+/* compact per-team match card (homepage "Nejbližší zápasy" grid) */
+.match-card--sm{ padding: 20px; }
+.match-card--sm .match-card__label{ color: var(--yellow); font-family:'Oswald',sans-serif; font-size:.8rem; font-weight:700; letter-spacing:.08em; margin-bottom: 14px; }
+.match-card--sm .match-card__teams{ gap: 10px; margin-bottom: 12px; }
+.match-card--sm .match-card__team{ font-size: 1rem; }
+.match-card--sm .match-card__vs{ width: 32px; height: 32px; font-size: .68rem; }
+.match-card--sm .match-card__empty{ font-size: .9rem; padding: 6px 0 14px; }
+.match-card__link{ display: flex; margin-top: 16px; }
+
 /* team cards */
 .team-card{
   background: var(--card);
@@ -402,6 +411,20 @@ table.tabulka tr.tabulka--nas td:first-child{ border-left: 3px solid var(--yello
   border-radius: var(--radius);
 }
 .empty-note strong{ color: var(--yellow); display:block; margin-bottom:6px; font-family:'Oswald',sans-serif; }
+
+/* ---------- Tabulky soutěží na hlavní stránce ---------- */
+/* Širší kontejner a pevně 2 sloupce (2 karty vedle sebe, další 2 pod nimi),
+   tabulka uvnitř se zmenší/zalomí místo horizontálního scrollování. */
+#tabulky .container{ max-width: 1400px; }
+#tabulky .grid{ grid-template-columns: repeat(2, 1fr); }
+#tabulky .table-wrap{ overflow-x: visible; }
+#tabulky table.tabulka{ min-width: 0; width: 100%; font-size: .84rem; }
+#tabulky table.tabulka th, #tabulky table.tabulka td{ padding: 8px 6px; white-space: normal; }
+#tabulky table.tabulka th:first-child, #tabulky table.tabulka td:first-child{ padding-left: 10px; }
+
+@media (max-width: 760px){
+  #tabulky .grid{ grid-template-columns: 1fr; }
+}
 
 /* ---------- Team detail page ---------- */
 .team-hero{

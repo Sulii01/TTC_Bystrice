@@ -7,9 +7,9 @@ Aktualizace dat webu TTC Bystřice ze STIS (stis.ping-pong.cz)
 Co dělá:
   Stáhne z STIS aktuální tabulku, rozpis/výsledky utkání a soupisku pro
   všechna 4 družstva (A/B/C/D) a doplní je do tym-a.html .. tym-d.html.
-  Na hlavní stránce (index.html) doplní "Výsledky posledních zápasů" (poslední
-  odehraný zápas každého týmu) a "Nejbližší zápas" (nejbližší budoucí utkání
-  ze všech čtyř týmů).
+  Na hlavní stránce (index.html) doplní pro KAŽDÝ tým zvlášť: "Výsledky
+  posledních zápasů" (poslední odehraný zápas), "Nejbližší zápasy" (nejbližší
+  budoucí utkání) a "Tabulky soutěží" (průběžná tabulka dané soutěže).
 
   Pokud STIS pro danou soutěž ještě nemá zveřejněná žádná data (typicky před
   začátkem sezóny), příslušná stránka se PONECHÁ BEZE ZMĚNY (zůstane pěkné
@@ -298,12 +298,8 @@ def render_vysledek_karta(last_match, team_letter):
 
 def render_nejblizsi(next_match):
     if not next_match:
-        return (
-            '<div class="match-card__comp">Sezóna — Okresní soutěže Frýdek-Místek</div>'
-            '<div class="match-card__empty">Momentálně není naplánován žádný nadcházející zápas.</div>'
-        )
+        return '<div class="match-card__empty">Momentálně není naplánován žádný nadcházející zápas.</div>'
     return (
-        f'<div class="match-card__comp">{next_match["soutez_nazev"]}</div>'
         '<div class="match-card__teams">'
         f'<span class="match-card__team">{next_match["domaci"]}</span>'
         '<span class="match-card__vs">VS</span>'
@@ -347,7 +343,8 @@ def main():
     print("Připojuji se na STIS...")
 
     all_last_matches = {}
-    all_upcoming = []
+    upcoming_by_letter = {}
+    all_tables = {}
     teams_with_los_data = set()
 
     for team in TEAMS:
@@ -364,6 +361,7 @@ def main():
         tab_html = fetch(opener, f"/tabulka/svaz-{SVAZ}/rocnik-{ROCNIK}/soutez-{soutez}")
         rows = parse_tabulka(tab_html, NAS_ODDIL)
         if rows:
+            all_tables[letter] = rows
             html, ok = replace_marker(html, "TABULKA", render_tabulka(rows))
             changed = changed or ok
             print(f"  tabulka: {len(rows)} družstev (aktualizováno)")
@@ -384,9 +382,7 @@ def main():
                 all_last_matches[letter] = played[-1]
             future = [m for m in matches if not m["vysledek"]]
             if future:
-                nxt = dict(future[0])
-                nxt["soutez_nazev"] = f"Tým {letter} — {team['nazev']}"
-                all_upcoming.append(nxt)
+                upcoming_by_letter[letter] = future[0]
         else:
             print("  rozpis: STIS pro tuto soutěž zatím nemá utkání — ponechávám beze změny")
 
@@ -404,7 +400,7 @@ def main():
             save(path, html)
             print(f"  -> uloženo do {fname}")
 
-    # index.html — výsledky posledních zápasů + nejbližší zápas
+    # index.html — výsledky posledních zápasů, nejbližší zápasy, tabulky soutěží
     index_path = os.path.join(ROOT, "index.html")
     if os.path.exists(index_path):
         print("\nindex.html")
@@ -412,6 +408,11 @@ def main():
         any_change = False
         for team in TEAMS:
             letter = team["letter"]
+
+            if letter in all_tables:
+                html, ok = replace_marker(html, f"TABULKA:{letter}", render_tabulka(all_tables[letter]))
+                any_change = any_change or ok
+
             if letter not in teams_with_los_data:
                 # STIS pro tento tým zatím nemá vůbec žádné rozlosování — nechat
                 # stránku beze změny, ať tam zůstane hezčí popisný placeholder.
@@ -420,11 +421,8 @@ def main():
             html, ok = replace_marker(html, f"VYSLEDKY:{letter}", render_vysledek_karta(last, letter))
             any_change = any_change or ok
 
-        if all_upcoming:
-            # nejbližší datum napříč všemi týmy (řetězcové porovnání data ve formátu STIS
-            # nefunguje spolehlivě, proto bereme jednoduše první tým s rozlosováním)
-            next_match = all_upcoming[0]
-            html, ok = replace_marker(html, "NEJBLIZSI", render_nejblizsi(next_match))
+            next_match = upcoming_by_letter.get(letter)
+            html, ok = replace_marker(html, f"NEJBLIZSI:{letter}", render_nejblizsi(next_match))
             any_change = any_change or ok
 
         if any_change:

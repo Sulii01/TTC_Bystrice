@@ -22,7 +22,7 @@
         <li><a href="index.html" class="active">Domů</a></li>
         <li><a href="#aktuality">Aktuality</a></li>
         <li><a href="#vysledky">Výsledky</a></li>
-        <li><a href="#zapas">Nejbližší zápas</a></li>
+        <li><a href="#zapas">Nejbližší zápasy</a></li>
         <li class="nav__dropdown">
           <a href="#tymy">Týmy ▾</a>
           <div class="nav__dropdown-menu">
@@ -139,24 +139,47 @@
   </div>
 </section>
 
-<!-- NEJBLIŽŠÍ ZÁPAS -->
+<!-- NEJBLIŽŠÍ ZÁPASY -->
 <section class="section" id="zapas">
   <div class="container">
     <div class="section__head">
-      <h2>Nejbližší zápas</h2>
-      <a href="https://stis.ping-pong.cz/los-aktualni/svaz-420802/rocnik-2026/soutez-6722/radit-datum" target="_blank" rel="noopener" class="btn btn--sm btn--ghost">Živé rozlosování na STIS ↗</a>
+      <h2>Nejbližší zápasy</h2>
+      <a href="https://stis.ping-pong.cz/oddil-420802047/svaz-420802/rocnik-2026" target="_blank" rel="noopener" class="btn btn--sm btn--ghost">Živé rozlosování na STIS ↗</a>
     </div>
+    <div class="grid grid--4">
 
-    <div class="match-card">
-      <!-- DATA:NEJBLIZSI:START -->
-      <div class="match-card__comp">Tým A — TTC Bystřice</div><div class="match-card__teams"><span class="match-card__team">ST Kozlovice B</span><span class="match-card__vs">VS</span><span class="match-card__team">TTC Bystřice</span></div><div class="match-card__meta">Kolo 1 · So 26.09.2026 17:00</div>
-      <!-- DATA:NEJBLIZSI:END -->
-      <div class="hero__actions">
-        <a href="tym-a.html" class="btn btn--sm">Tým A</a>
-        <a href="tym-b.html" class="btn btn--sm">Tým B</a>
-        <a href="tym-c.html" class="btn btn--sm">Tým C</a>
-        <a href="tym-d.html" class="btn btn--sm">Tým D</a>
+      <div class="match-card match-card--sm">
+        <div class="match-card__label">Tým A — Okresní přebor</div>
+        <!-- DATA:NEJBLIZSI:A:START -->
+      <div class="match-card__teams"><span class="match-card__team">ST Kozlovice B</span><span class="match-card__vs">VS</span><span class="match-card__team">TTC Bystřice</span></div><div class="match-card__meta">Kolo 1 · So 26.09.2026 17:00</div>
+      <!-- DATA:NEJBLIZSI:A:END -->
+        <a href="tym-a.html" class="btn btn--sm btn--ghost match-card__link">Tým A →</a>
       </div>
+
+      <div class="match-card match-card--sm">
+        <div class="match-card__label">Tým B — OS 1. třídy</div>
+        <!-- DATA:NEJBLIZSI:B:START -->
+      <div class="match-card__teams"><span class="match-card__team">TTC Bystřice B</span><span class="match-card__vs">VS</span><span class="match-card__team">Sokol Palkovice</span></div><div class="match-card__meta">Kolo 1 · Pá 25.09.2026 17:30</div>
+      <!-- DATA:NEJBLIZSI:B:END -->
+        <a href="tym-b.html" class="btn btn--sm btn--ghost match-card__link">Tým B →</a>
+      </div>
+
+      <div class="match-card match-card--sm">
+        <div class="match-card__label">Tým C — OS 4. třídy</div>
+        <!-- DATA:NEJBLIZSI:C:START -->
+      <div class="match-card__teams"><span class="match-card__team">Sokol Myslík</span><span class="match-card__vs">VS</span><span class="match-card__team">TTC Bystřice C</span></div><div class="match-card__meta">Kolo 1 · Pá 25.09.2026 18:00</div>
+      <!-- DATA:NEJBLIZSI:C:END -->
+        <a href="tym-c.html" class="btn btn--sm btn--ghost match-card__link">Tým C →</a>
+      </div>
+
+      <div class="match-card match-card--sm">
+        <div class="match-card__label">Tým D — OS 5. třídy</div>
+        <!-- DATA:NEJBLIZSI:D:START -->
+      <div class="match-card__teams"><span class="match-card__team">TTC Bystřice D</span><span class="match-card__vs">VS</span><span class="match-card__team">ST Kozlovice E</span></div><div class="match-card__meta">Kolo 1 · Pá 25.09.2026 17:30</div>
+      <!-- DATA:NEJBLIZSI:D:END -->
+        <a href="tym-d.html" class="btn btn--sm btn--ghost match-card__link">Tým D →</a>
+      </div>
+
     </div>
   </div>
 </section>
@@ -215,27 +238,120 @@
     <div class="section__head">
       <h2>Tabulky soutěží</h2>
     </div>
-    <p style="margin-top:-14px;margin-bottom:26px">
-      Průběžné tabulky se zobrazí po zahájení sezóny 2026/2027. Do té doby si můžete prohlédnout aktuální
-      stav přímo v informačním systému STIS pro každou soutěž zvlášť — odkazy najdete na stránce každého týmu.
-    </p>
-    <div class="grid grid--4">
+    <div class="grid grid--2">
+
       <div class="card">
         <h3>A — Okresní přebor</h3>
-        <p style="margin-top:6px"><a href="tym-a.html">Zobrazit tým a tabulku →</a></p>
+        <!-- DATA:TABULKA:A:START -->
+      <div class="table-wrap">
+      <table class="tabulka">
+        <thead>
+          <tr><th>#</th><th>Družstvo</th><th>Zápasy</th><th>V</th><th>R</th><th>P</th><th>Skóre</th><th>Body</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>SK Smilovice</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0:0</td><td>0</td></tr>
+          <tr><td>2</td><td>ST Kozlovice B</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0:0</td><td>0</td></tr>
+          <tr><td>3</td><td>Sokol Krmelín</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0:0</td><td>0</td></tr>
+          <tr><td>4</td><td>Sokol Staré Město</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0:0</td><td>0</td></tr>
+          <tr class="tabulka--nas"><td>5</td><td>TTC Bystřice</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0:0</td><td>0</td></tr>
+          <tr><td>6</td><td>SK Slavoj Pstruží</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0:0</td><td>0</td></tr>
+          <tr><td>7</td><td>Orel Paskov B</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0:0</td><td>0</td></tr>
+          <tr><td>8</td><td>KST Brušperk C</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0:0</td><td>0</td></tr>
+          <tr><td>9</td><td>SSK Komorní Lhotka B</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0:0</td><td>0</td></tr>
+          <tr><td>10</td><td>TTC WS Slezan F-M B</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0:0</td><td>0</td></tr>
+          <tr><td>11</td><td>TJ Janovice</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0:0</td><td>0</td></tr>
+          <tr><td>12</td><td>Sokol  Metylovice</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0:0</td><td>0</td></tr>
+        </tbody>
+      </table>
+    </div>
+      <!-- DATA:TABULKA:A:END -->
+        <p style="margin-top:16px"><a href="tym-a.html">Zobrazit tým a tabulku →</a></p>
       </div>
+
       <div class="card">
         <h3>B — OS 1. třídy</h3>
-        <p style="margin-top:6px"><a href="tym-b.html">Zobrazit tým a tabulku →</a></p>
+        <!-- DATA:TABULKA:B:START -->
+      <div class="table-wrap">
+      <table class="tabulka">
+        <thead>
+          <tr><th>#</th><th>Družstvo</th><th>Zápasy</th><th>V</th><th>R</th><th>P</th><th>Skóre</th><th>Body</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>TŽ Třinec E</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0:0</td><td>0</td></tr>
+          <tr><td>2</td><td>Sokol Ropice</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0:0</td><td>0</td></tr>
+          <tr><td>3</td><td>Sokol Palkovice</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0:0</td><td>0</td></tr>
+          <tr><td>4</td><td>SK Frýdlant</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0:0</td><td>0</td></tr>
+          <tr><td>5</td><td>TTC FRÝDLANT C</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0:0</td><td>0</td></tr>
+          <tr><td>6</td><td>Sokol Dobrá</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0:0</td><td>0</td></tr>
+          <tr class="tabulka--nas"><td>7</td><td>TTC Bystřice B</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0:0</td><td>0</td></tr>
+          <tr><td>8</td><td>Orel Paskov C</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0:0</td><td>0</td></tr>
+          <tr><td>9</td><td>Sokol Skalice</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0:0</td><td>0</td></tr>
+          <tr><td>10</td><td>TTC WS Frýdek-Místek C</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0:0</td><td>0</td></tr>
+          <tr><td>11</td><td>TTC Třinec</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0:0</td><td>0</td></tr>
+          <tr><td>12</td><td>Sokol  Metylovice B</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0:0</td><td>0</td></tr>
+        </tbody>
+      </table>
+    </div>
+      <!-- DATA:TABULKA:B:END -->
+        <p style="margin-top:16px"><a href="tym-b.html">Zobrazit tým a tabulku →</a></p>
       </div>
+
       <div class="card">
         <h3>C — OS 4. třídy</h3>
-        <p style="margin-top:6px"><a href="tym-c.html">Zobrazit tým a tabulku →</a></p>
+        <!-- DATA:TABULKA:C:START -->
+      <div class="table-wrap">
+      <table class="tabulka">
+        <thead>
+          <tr><th>#</th><th>Družstvo</th><th>Zápasy</th><th>V</th><th>R</th><th>P</th><th>Skóre</th><th>Body</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>SK Smilovice C</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0:0</td><td>0</td></tr>
+          <tr><td>2</td><td>TJ Milíkov / Dol. Lomná B</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0:0</td><td>0</td></tr>
+          <tr><td>3</td><td>SK Návsí B</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0:0</td><td>0</td></tr>
+          <tr><td>4</td><td>Sokol Ropice D</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0:0</td><td>0</td></tr>
+          <tr><td>5</td><td>ST Kozlovice D</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0:0</td><td>0</td></tr>
+          <tr class="tabulka--nas"><td>6</td><td>TTC Bystřice C</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0:0</td><td>0</td></tr>
+          <tr><td>7</td><td>SSK Komorní Lhotka D</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0:0</td><td>0</td></tr>
+          <tr><td>8</td><td>Slavoj Pstruží B</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0:0</td><td>0</td></tr>
+          <tr><td>9</td><td>Sokol Myslík</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0:0</td><td>0</td></tr>
+          <tr><td>10</td><td>KST Písek  B</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0:0</td><td>0</td></tr>
+          <tr><td>11</td><td>TTC WS  Frýdek-Místek F</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0:0</td><td>0</td></tr>
+          <tr><td>12</td><td>Sokol  Metylovice D</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0:0</td><td>0</td></tr>
+        </tbody>
+      </table>
+    </div>
+      <!-- DATA:TABULKA:C:END -->
+        <p style="margin-top:16px"><a href="tym-c.html">Zobrazit tým a tabulku →</a></p>
       </div>
+
       <div class="card">
         <h3>D — OS 5. třídy</h3>
-        <p style="margin-top:6px"><a href="tym-d.html">Zobrazit tým a tabulku →</a></p>
+        <!-- DATA:TABULKA:D:START -->
+      <div class="table-wrap">
+      <table class="tabulka">
+        <thead>
+          <tr><th>#</th><th>Družstvo</th><th>Zápasy</th><th>V</th><th>R</th><th>P</th><th>Skóre</th><th>Body</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>SK Smilovice D</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0:0</td><td>0</td></tr>
+          <tr><td>2</td><td>SK Návsí C</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0:0</td><td>0</td></tr>
+          <tr><td>3</td><td>SK Návsí D</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0:0</td><td>0</td></tr>
+          <tr><td>4</td><td>Sokol Ropice E</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0:0</td><td>0</td></tr>
+          <tr><td>5</td><td>ST Kozlovice E</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0:0</td><td>0</td></tr>
+          <tr><td>6</td><td>Sokol Dobrá D</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0:0</td><td>0</td></tr>
+          <tr><td>7</td><td>Sokol Staré Město C</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0:0</td><td>0</td></tr>
+          <tr class="tabulka--nas"><td>8</td><td>TTC Bystřice D</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0:0</td><td>0</td></tr>
+          <tr><td>9</td><td>TJ Oldřichovice C</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0:0</td><td>0</td></tr>
+          <tr><td>10</td><td>Sokol Myslík B</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0:0</td><td>0</td></tr>
+          <tr><td>11</td><td>TTC WS Frýdek-Místek G</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0:0</td><td>0</td></tr>
+          <tr><td>12</td><td>Beskyd Líštná B</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0:0</td><td>0</td></tr>
+        </tbody>
+      </table>
+    </div>
+      <!-- DATA:TABULKA:D:END -->
+        <p style="margin-top:16px"><a href="tym-d.html">Zobrazit tým a tabulku →</a></p>
       </div>
+
     </div>
   </div>
 </section>
