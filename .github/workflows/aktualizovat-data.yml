@@ -1,0 +1,40 @@
+name: Aktualizace dat ze STIS
+
+# Kdy se skript spouští:
+#  1) automaticky každou neděli ve 20:00 UTC (cca 21-22 hodin našeho času)
+#  2) kdykoliv ručně tlačítkem "Run workflow" na GitHubu (záložka Actions)
+on:
+  schedule:
+    - cron: '0 20 * * 0'
+  workflow_dispatch: {}
+
+# Aby mohl workflow commitnout a pushnout změny zpět do repozitáře
+permissions:
+  contents: write
+
+jobs:
+  aktualizovat:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Stáhnout repozitář
+        uses: actions/checkout@v4
+
+      - name: Nastavit Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Spustit aktualizaci dat ze STIS
+        run: python aktualizovat_data.py
+
+      - name: Commitnout a nahrát změny (pokud STIS přinesl něco nového)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet; then
+            echo "Žádné změny — STIS zatím nemá nová data."
+          else
+            git add -A
+            git commit -m "Automatická aktualizace dat ze STIS"
+            git push
+          fi
