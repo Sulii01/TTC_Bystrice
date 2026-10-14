@@ -289,10 +289,23 @@ def render_soupiska(players):
 def render_vysledek_karta(last_match, team_letter):
     if not last_match or not last_match.get("vysledek"):
         return ('<div class="result-card__empty">Zatím žádný odehraný zápas v této sezóně.</div>')
+    # Výherní stranu zvýrazníme (skóre je ve tvaru DOMÁCÍ:HOSTÉ); u remízy nezvýrazňujeme nic.
+    cls_d = cls_h = "is-draw"
+    score = last_match["vysledek"]
+    m = re.match(r"\s*(\d+)\s*:\s*(\d+)\s*$", score)
+    if m:
+        d, h = int(m.group(1)), int(m.group(2))
+        if d != h:
+            cls_d, cls_h = ("is-winner", "is-loser") if d > h else ("is-loser", "is-winner")
+        score = (f'<span class="{cls_d}">{d}</span><span class="result-card__colon">:</span>'
+                 f'<span class="{cls_h}">{h}</span>')
     return (
-        f'<div class="result-card__score">{last_match["vysledek"]}</div>'
-        f'<div class="result-card__meta">{last_match["domaci"]} – {last_match["hoste"]}'
-        f' · {last_match["datum"]}</div>'
+        f'<div class="result-card__score">{score}</div>'
+        '<div class="result-card__teams">'
+        f'<span class="{cls_d}">{last_match["domaci"]}</span>'
+        '<span class="result-card__dash"> – </span>'
+        f'<span class="{cls_h}">{last_match["hoste"]}</span></div>'
+        f'<div class="result-card__meta">{last_match["datum"]}</div>'
     )
 
 

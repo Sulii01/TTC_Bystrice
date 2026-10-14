@@ -314,10 +314,24 @@ header.site{
   border-radius: var(--radius);
   padding: 20px;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
-.result-card__team{ color: var(--yellow); font-family:'Oswald',sans-serif; font-size:.8rem; font-weight:700; letter-spacing:.08em; margin-bottom: 10px; }
-.result-card__score{ font-family:'Oswald',sans-serif; font-size: 1.5rem; font-weight: 700; color: var(--white); margin-bottom: 6px; }
-.result-card__meta{ font-size: .82rem; color: var(--grey-dark); }
+.result-card > .btn{ margin-top: auto; }
+.result-card__team{ color: var(--yellow); font-family:'Oswald',sans-serif; font-size:1rem; font-weight:700; letter-spacing:.08em; margin-bottom: 12px; }
+.result-card__score{ font-family:'Oswald',sans-serif; font-size: 2.2rem; font-weight: 700; line-height: 1.1; color: var(--white); margin-bottom: 10px; }
+.result-card__colon{ color: var(--grey-dark); margin: 0 .12em; }
+.result-card__teams{ font-size: .95rem; line-height: 1.45; color: var(--grey); margin-bottom: 6px; }
+.result-card__teams > span{ display: block; }
+.result-card__dash{ color: var(--grey-dark); font-size: .8em; line-height: 1.2; }
+.result-card__meta{ font-size: .88rem; color: var(--grey-dark); margin-bottom: 14px; }
+/* zvýraznění výherní strany (skóre i název družstva) */
+.result-card__score .is-winner{ color: var(--yellow); }
+.result-card__score .is-loser{ color: var(--grey-dark); }
+.result-card__teams .is-winner{ color: var(--white); font-weight: 700; }
+.result-card__teams .is-winner::before{ content: "🏆 "; }
+.result-card__teams .is-loser{ color: var(--grey-dark); }
 .result-card__empty{ color: var(--grey); font-size: .92rem; padding: 8px 0; }
 
 /* ---------- Fotogalerie ---------- */
