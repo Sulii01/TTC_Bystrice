@@ -162,15 +162,26 @@ def _cell_text(cell_html):
     return re.sub(r"\s+", " ", text).strip()
 
 
+SCORE_RE = re.compile(r"^\d+\s*:\s*\d+$")
+
+
 def _extract_vysledek(cell_html):
-    # buňka s výsledkem obsahuje atribut poznamka="<b>..." s detailem zápasu,
-    # který má uvnitř svoje vlastní "<" a ">" — obecné odstranění tagů by ho
-    # nesprávně vysypalo do viditelného textu, proto se cílí přímo na
-    # 'class="vysledek">SKÓRE<' (jednoznačný text bezprostředně před viditelným skóre).
-    m = re.search(r'class="vysledek">([^<]*)<', cell_html)
-    if m:
-        return html_unescape(m.group(1)).strip()
-    return _cell_text(cell_html)
+    # Buňka s výsledkem obsahuje atribut poznamka="<b>Výsledek:</b> 7:11 ... Body hostů: ..."
+    # s detailem zápasu, který má uvnitř svoje vlastní "<" a ">". Obecné odstranění tagů
+    # by celý detail vysypalo do viditelného textu (a na web by se dostal dlouhý nesmysl).
+    # Viditelné skóre je vždy až ÚPLNĚ NA KONCI buňky (např. ...">7:11</a>), proto se bere
+    # poslední kus textu mezi ">" a "<". STIS u některých utkání mění třídu odkazu
+    # (např. neověřený výsledek), takže se na class="vysledek" nespoléháme.
+    segments = [html_unescape(t).strip() for t in re.findall(r">([^<>]*)(?=<|$)", ">" + cell_html)]
+    segments = [t for t in segments if t]
+    if segments and SCORE_RE.match(segments[-1]):
+        return re.sub(r"\s+", "", segments[-1])
+    # záchrana: krátký viditelný text (např. "kont.") nebo poslední skóre v textu buňky
+    text = _cell_text(cell_html)
+    if len(text) <= 12:
+        return text
+    scores = re.findall(r"\d+\s*:\s*\d+", segments[-1] if segments else text)
+    return re.sub(r"\s+", "", scores[-1]) if scores else ""
 
 
 def parse_los(html):

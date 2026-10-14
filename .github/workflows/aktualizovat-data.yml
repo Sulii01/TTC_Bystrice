@@ -14,6 +14,9 @@ permissions:
 
 jobs:
   aktualizovat:
+    # Data se aktualizují jen na hlavní větvi "main" (z ní běží web). Spuštění nad jinou
+    # větví by commitlo data do té větve a na webu by se nic nezměnilo.
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - name: Stáhnout repozitář
