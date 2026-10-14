@@ -184,6 +184,26 @@ def _extract_vysledek(cell_html):
     return re.sub(r"\s+", "", scores[-1]) if scores else ""
 
 
+def _extract_odkaz(cell_html, row_html):
+    # Odkaz na detail konkrétního utkání: primárně odkaz na skóre v buňce s výsledkem,
+    # jinak jakýkoliv odkaz v řádku, který vede na utkání (ne na družstvo/oddíl).
+    def usable(href):
+        href = html_unescape(href).strip()
+        if not href or href.startswith(("#", "javascript", "mailto")):
+            return None
+        return href if href.startswith("http") else BASE + "/" + href.lstrip("/")
+    for href in re.findall(r'href="([^"]*)"', cell_html):
+        url = usable(href)
+        if url:
+            return url
+    for href in re.findall(r'href="([^"]*)"', row_html):
+        if re.search(r"utkani|zapis", href, re.I):
+            url = usable(href)
+            if url:
+                return url
+    return ""
+
+
 def parse_los(html):
     if "Žádná utkání!" in html:
         return []
@@ -201,11 +221,12 @@ def parse_los(html):
         domaci = _cell_text(cells[2])
         hoste = _cell_text(cells[3])
         vysledek = _extract_vysledek(cells[4]) if len(cells) > 4 else ""
+        odkaz = _extract_odkaz(cells[4], row_html) if len(cells) > 4 and vysledek else ""
         if not (kolo or datum or domaci or hoste):
             continue
         matches.append({
             "kolo": kolo, "datum": datum, "domaci": domaci,
-            "hoste": hoste, "vysledek": vysledek,
+            "hoste": hoste, "vysledek": vysledek, "odkaz": odkaz,
         })
     return matches
 
@@ -297,9 +318,17 @@ def render_soupiska(players):
     )
 
 
-def render_vysledek_karta(last_match, team_letter):
+def render_stis_tlacitko(url):
+    return (f'<a href="{url}" target="_blank" rel="noopener" class="btn btn--sm btn--ghost">'
+            "Výsledky na STIS ↗</a>")
+
+
+def render_vysledek_karta(last_match, team):
+    # Tlačítko vede na detail posledního utkání; když ho STIS nemá, na výsledky družstva.
+    team_url = f"{BASE}/vysledky/svaz-{SVAZ}/rocnik-{ROCNIK}/soutez-{team['soutez']}/druzstvo-{team['druzstvo']}"
     if not last_match or not last_match.get("vysledek"):
-        return ('<div class="result-card__empty">Zatím žádný odehraný zápas v této sezóně.</div>')
+        return ('<div class="result-card__empty">Zatím žádný odehraný zápas v této sezóně.</div>'
+                + render_stis_tlacitko(team_url))
     # Výherní stranu zvýrazníme (skóre je ve tvaru DOMÁCÍ:HOSTÉ); u remízy nezvýrazňujeme nic.
     cls_d = cls_h = "is-draw"
     score = last_match["vysledek"]
@@ -318,6 +347,7 @@ def render_vysledek_karta(last_match, team_letter):
         '<span class="result-card__dash"> –</span></span> '
         f'<span class="result-card__side"><span class="{cls_h}">{last_match["hoste"]}</span></span></div>'
         f'<div class="result-card__meta">{last_match["datum"]}</div>'
+        + render_stis_tlacitko(last_match.get("odkaz") or team_url)
     )
 
 
@@ -443,7 +473,7 @@ def main():
                 # stránku beze změny, ať tam zůstane hezčí popisný placeholder.
                 continue
             last = all_last_matches.get(letter)
-            html, ok = replace_marker(html, f"VYSLEDKY:{letter}", render_vysledek_karta(last, letter))
+            html, ok = replace_marker(html, f"VYSLEDKY:{letter}", render_vysledek_karta(last, team))
             any_change = any_change or ok
 
             next_match = upcoming_by_letter.get(letter)
