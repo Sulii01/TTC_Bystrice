@@ -301,10 +301,11 @@ def render_vysledek_karta(last_match, team_letter):
                  f'<span class="{cls_h}">{h}</span>')
     return (
         f'<div class="result-card__score">{score}</div>'
+        # Každý tým je nezalomitelný celek; řádek se smí zalomit jen mezi týmy (pomlčka zůstává u domácích).
         '<div class="result-card__teams">'
-        f'<span class="{cls_d}">{last_match["domaci"]}</span>'
-        '<span class="result-card__dash"> – </span>'
-        f'<span class="{cls_h}">{last_match["hoste"]}</span></div>'
+        f'<span class="result-card__side"><span class="{cls_d}">{last_match["domaci"]}</span>'
+        '<span class="result-card__dash"> –</span></span> '
+        f'<span class="result-card__side"><span class="{cls_h}">{last_match["hoste"]}</span></span></div>'
         f'<div class="result-card__meta">{last_match["datum"]}</div>'
     )
 
