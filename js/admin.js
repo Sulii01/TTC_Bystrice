@@ -14,6 +14,18 @@
   var ja = null;        // { id, email, role, jmeno }
   var aktuality = [];   // načtené aktuality (pro úpravy)
   var upravujeId = null;
+  var fotky = [];       // načtené fotky (pro filtr podle alba)
+  var LETOS = new Date().getFullYear();
+
+  // výběr roku: od založení oddílu (2007) do příštího roku, nejnovější nahoře
+  function rokyOptions(vybrany) {
+    var html = '';
+    for (var r = LETOS + 1; r >= 2007; r--) {
+      html += '<option value="' + r + '"' + (r === vybrany ? ' selected' : '') + '>' + r + '</option>';
+    }
+    return html;
+  }
+  document.querySelectorAll('select[data-roky]').forEach(function (sel) { sel.innerHTML = rokyOptions(LETOS); });
 
   function esc(s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
@@ -201,19 +213,49 @@
 
   // ---------- fotogalerie ----------
   function nactiFotky() {
-    sb.from('galerie').select('*').order('vytvoreno', { ascending: false }).then(function (res) {
-      if (res.error) throw res.error;
-      $('foto-seznam').innerHTML = res.data.length ? res.data.map(function (f) {
-        var muze = smi(f.autor);
-        return '<div class="admin__photo" data-id="' + f.id + '" data-cesta="' + esc(f.cesta) + '">' +
-          '<img src="' + fotoUrl(f.cesta) + '" alt="" loading="lazy">' +
-          '<input type="text" maxlength="120" value="' + esc(f.popisek || '') + '" placeholder="Bez popisku"' + (muze ? '' : ' disabled') + '>' +
-          (muze ? '<div class="admin__row"><button type="button" class="btn btn--sm btn--ghost" data-popisek>Uložit popisek</button>' +
-                  '<button type="button" class="btn btn--sm btn--danger" data-smazat-foto>Smazat</button></div>' : '') +
-          '</div>';
-      }).join('') : '<p class="admin__muted">V galerii zatím nejsou žádné fotky.</p>';
-    }).catch(function (err) { $('foto-seznam').innerHTML = '<p class="admin__msg">' + esc(cesky(err)) + '</p>'; });
+    sb.from('galerie').select('*').order('rok', { ascending: false }).order('vytvoreno', { ascending: false })
+      .then(function (res) {
+        if (res.error) throw res.error;
+        fotky = res.data;
+        // filtr: jen roky, ve kterých nějaké fotky jsou
+        var filtr = $('foto-filtr'), zvoleny = filtr.value;
+        var roky = fotky.map(function (f) { return f.rok; }).filter(function (r, i, a) { return a.indexOf(r) === i; });
+        filtr.innerHTML = '<option value="">Všechna alba</option>' + roky.map(function (r) {
+          var n = fotky.filter(function (f) { return f.rok === r; }).length;
+          return '<option value="' + r + '"' + (String(r) === zvoleny ? ' selected' : '') + '>' + r + ' (' + n + ')</option>';
+        }).join('');
+        vykresliFotky();
+      })
+      .catch(function (err) { $('foto-seznam').innerHTML = '<p class="admin__msg">' + esc(cesky(err)) + '</p>'; });
   }
+
+  function vykresliFotky() {
+    var zvoleny = $('foto-filtr').value;
+    var vyber = fotky.filter(function (f) { return !zvoleny || String(f.rok) === zvoleny; });
+    if (!vyber.length) {
+      $('foto-seznam').innerHTML = '<p class="admin__muted">V galerii zatím nejsou žádné fotky.</p>';
+      return;
+    }
+    // seskupit po albech (rocích)
+    var html = '', rok = null;
+    vyber.forEach(function (f) {
+      if (f.rok !== rok) {
+        if (rok !== null) html += '</div>';
+        rok = f.rok;
+        html += '<h3 class="admin__album">Album ' + rok + '</h3><div class="admin__photos">';
+      }
+      var muze = smi(f.autor);
+      html += '<div class="admin__photo" data-id="' + f.id + '" data-cesta="' + esc(f.cesta) + '">' +
+        '<img src="' + fotoUrl(f.cesta) + '" alt="" loading="lazy">' +
+        '<input type="text" maxlength="120" value="' + esc(f.popisek || '') + '" placeholder="Bez popisku"' + (muze ? '' : ' disabled') + '>' +
+        '<select class="admin__select"' + (muze ? '' : ' disabled') + ' aria-label="Album">' + rokyOptions(f.rok) + '</select>' +
+        (muze ? '<div class="admin__row"><button type="button" class="btn btn--sm btn--ghost" data-popisek>Uložit</button>' +
+                '<button type="button" class="btn btn--sm btn--danger" data-smazat-foto>Smazat</button></div>' : '') +
+        '</div>';
+    });
+    $('foto-seznam').innerHTML = html + '</div>';
+  }
+  $('foto-filtr').addEventListener('change', vykresliFotky);
 
   // zmenší fotku na max. 1600 px a převede na JPEG
   function zmensi(file) {
@@ -242,11 +284,12 @@
     var f = e.target;
     var soubory = Array.prototype.slice.call(f.soubory.files);
     var popisek = f.popisek.value.trim() || null;
+    var rokAlba = parseInt(f.rok.value, 10);
     if (!soubory.length) return;
     $('foto-nahrat').disabled = true;
     var hotovo = 0, chyby = [];
     var d = new Date();
-    var prefix = d.getFullYear() + '/' + String(d.getMonth() + 1).padStart(2, '0') + '/';
+    var prefix = rokAlba + '/';
 
     soubory.reduce(function (p, file, i) {
       return p.then(function () {
@@ -258,7 +301,7 @@
           })
           .then(function (res) {
             if (res.error) throw res.error;
-            return sb.from('galerie').insert({ cesta: cesta, popisek: popisek });
+            return sb.from('galerie').insert({ cesta: cesta, popisek: popisek, rok: rokAlba });
           })
           .then(function (res) {
             if (res.error) {
@@ -272,7 +315,8 @@
     }, Promise.resolve()).then(function () {
       $('foto-nahrat').disabled = false;
       f.reset();
-      zprava('foto-msg', (hotovo ? 'Nahráno fotek: ' + hotovo + '. ' : '') + chyby.join(' '), !chyby.length);
+      f.rok.value = rokAlba;   // rok nechat vybraný pro další dávku fotek
+      zprava('foto-msg', (hotovo ? 'Nahráno fotek do alba ' + rokAlba + ': ' + hotovo + '. ' : '') + chyby.join(' '), !chyby.length);
       nactiFotky();
     });
   });
@@ -283,11 +327,15 @@
     var id = box.getAttribute('data-id'), cesta = box.getAttribute('data-cesta');
     if (e.target.hasAttribute('data-popisek')) {
       var popisek = box.querySelector('input').value.trim() || null;
-      sb.from('galerie').update({ popisek: popisek }).eq('id', id).select().then(function (res) {
+      var novyRok = parseInt(box.querySelector('select').value, 10);
+      sb.from('galerie').update({ popisek: popisek, rok: novyRok }).eq('id', id).select().then(function (res) {
         if (res.error) throw res.error;
         if (!res.data || !res.data.length) throw new Error('permission denied');
+        var f = fotky.find(function (x) { return String(x.id) === id; });
+        var presun = f && f.rok !== novyRok;
+        if (presun) return nactiFotky();   // fotka se přesunula do jiného alba
         e.target.textContent = 'Uloženo ✓';
-        setTimeout(function () { e.target.textContent = 'Uložit popisek'; }, 1500);
+        setTimeout(function () { e.target.textContent = 'Uložit'; }, 1500);
       }).catch(function (err) { alert(cesky(err)); });
     }
     if (e.target.hasAttribute('data-smazat-foto')) {

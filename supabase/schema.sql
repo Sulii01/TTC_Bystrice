@@ -81,6 +81,8 @@ create table if not exists public.galerie (
   id        bigint generated always as identity primary key,
   cesta     text not null unique,                    -- název souboru v úložišti "galerie"
   popisek   text,
+  rok       integer not null default extract(year from now() at time zone 'Europe/Prague')::integer
+            check (rok between 2000 and 2100),       -- album (rok), do kterého fotka patří
   vytvoreno timestamptz not null default now(),
   autor     uuid default auth.uid() references auth.users (id) on delete set null
 );
