@@ -14,5 +14,5 @@ jobs:
       - name: Dotaz na databázi
         run: |
           curl -sS --fail -o /dev/null -w "HTTP %{http_code}\n" \
-            "https://fptbjlorsntkhvxwipbk.supabase.co/rest/v1/aktuality?select=id&limit=1" \
+            "https://fptbjlorsntkhvxwipbk.supabase.co/rest/v1/galerie?select=id,rok&limit=1" \
             -H "apikey: sb_publishable_CSbr0yhY2wwplXYcohfMfQ_URL_W_e0"
