@@ -6,7 +6,7 @@
 <title>TTC Bystřice</title>
 <meta name="description" content="Oficiální stránky oddílu stolního tenisu TTC Bystřice — aktuality, výsledky, tabulky soutěží a soupisky družstev A, B, C, D.">
 <link rel="icon" type="image/png" href="images/Logo.png">
-<link rel="stylesheet" href="css/style.css?v=2">
+<link rel="stylesheet" href="css/style.css?v=3">
 </head>
 <body>
 
@@ -57,39 +57,9 @@
     <div class="section__head">
       <h2>Aktuality</h2>
     </div>
-    <div class="grid grid--3">
-
-      <article class="news-card">
-        <span class="tag">Klub</span>
-        <div class="news-card__date">Srpen 2026</div>
-        <h3>Nové klubové stránky jsou tu!</h3>
-        <p>Spouštíme nový web TTC Bystřice, kde budeme přinášet aktuality, výsledky zápasů, tabulky soutěží
-        a soupisky všech čtyř našich družstev. Sledujte nás i nadále.</p>
-      </article>
-
-      <article class="news-card">
-        <span class="tag">Sezóna</span>
-        <div class="news-card__date">Sezóna 2026/2027</div>
-        <h3>Příprava na novou sezónu</h3>
-        <p>Rozlosování a tabulky soutěží pro ročník 2026/2027 zveřejní STIS ČAST před zahájením soutěží.
-        Jakmile budou k dispozici první termíny, doplníme je zde i v sekcích jednotlivých družstev.</p>
-      </article>
-
-      <article class="news-card">
-        <span class="tag">Nábor</span>
-        <div class="news-card__date">Celoročně</div>
-        <h3>Hledáme nové hráče a hráčky</h3>
-        <p>Máte rádi stolní tenis a chcete si zahrát závodně i rekreačně? Ozvěte se nám na kontaktní e-mail
-        níže — rádi vás přivítáme na tréninku v naší herně.</p>
-      </article>
-
+    <div class="grid grid--3" data-obsah="aktuality" data-limit="6">
+      <div class="gallery-empty"><strong>Načítám aktuality…</strong></div>
     </div>
-    <!--
-    <p style="margin-top:22px;font-size:.85rem;color:var(--grey-dark)">
-      Tip pro správce webu: tuto sekci stačí upravovat přímo v <code>index.html</code> — každá aktualita je jedna
-      karta <code>&lt;article class="news-card"&gt;</code>.
-    </p>
-    -->
   </div>
 </section>
 
@@ -401,11 +371,8 @@
       <h2>Fotogalerie</h2>
       <a href="galerie.html" class="btn btn--sm btn--ghost">Celá galerie →</a>
     </div>
-    <div class="gallery-grid">
-      <div class="gallery-empty">
-        <strong>Galerie zatím čeká na první fotky z tréninků a zápasů</strong>
-        Celou fotogalerii najdete na samostatné stránce — fotky se doplní postupně.
-      </div>
+    <div class="gallery-grid" data-obsah="galerie" data-limit="8">
+      <div class="gallery-empty"><strong>Načítám fotky…</strong></div>
     </div>
   </div>
 </section>
@@ -448,11 +415,13 @@
       </div>
     </div>
     <div class="footer__bottom">
-      © 2026 TTC Bystřice — data o soutěžích: <a href="https://stis.ping-pong.cz/" target="_blank" rel="noopener">STIS ČAST</a>
+      © 2026 TTC Bystřice — data o soutěžích: <a href="https://stis.ping-pong.cz/" target="_blank" rel="noopener">STIS ČAST</a> · <a href="admin.html" class="footer__admin">Administrace</a>
     </div>
   </div>
 </footer>
 
 <script src="js/main.js"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/obsah.js"></script>
 </body>
 </html>

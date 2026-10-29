@@ -1,0 +1,18 @@
+name: Udržování databáze Supabase vzhůru
+
+# Bezplatný projekt Supabase se po 7 dnech bez aktivity uspí (a aktuality s galerií
+# by se přestaly načítat). Tahle úloha se proto každé 3 dny k databázi jednou připojí.
+on:
+  schedule:
+    - cron: '17 6 */3 * *'
+  workflow_dispatch: {}
+
+jobs:
+  probudit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dotaz na databázi
+        run: |
+          curl -sS --fail -o /dev/null -w "HTTP %{http_code}\n" \
+            "https://fptbjlorsntkhvxwipbk.supabase.co/rest/v1/aktuality?select=id&limit=1" \
+            -H "apikey: sb_publishable_CSbr0yhY2wwplXYcohfMfQ_URL_W_e0"

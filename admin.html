@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Administrace — TTC Bystřice</title>
+<link rel="icon" type="image/png" href="images/Logo.png">
+<link rel="stylesheet" href="css/style.css?v=3">
+</head>
+<body class="admin">
+
+<header class="site">
+  <div class="container nav">
+    <a href="index.html" class="brand">
+      <img src="images/Logo.png" alt="Logo TTC Bystřice">
+      <span class="brand__name">TTC Bystřice<span>Administrace webu</span></span>
+    </a>
+    <a href="index.html" class="btn btn--sm btn--ghost">← Zpět na web</a>
+  </div>
+</header>
+
+<main class="section">
+  <div class="container admin__wrap">
+
+    <!-- PŘIHLÁŠENÍ -->
+    <section id="prihlaseni" class="card admin__login" hidden>
+      <h1>Přihlášení</h1>
+      <p class="admin__muted">Jen pro správce a editory webu. Přihlašovací údaje vám dá správce oddílu.</p>
+      <form id="login-form" class="admin__form">
+        <label>E-mail<input type="email" name="email" autocomplete="username" required></label>
+        <label>Heslo<input type="password" name="heslo" autocomplete="current-password" required></label>
+        <button type="submit" class="btn">Přihlásit se</button>
+        <p class="admin__msg" id="login-msg" role="alert"></p>
+      </form>
+    </section>
+
+    <!-- ADMINISTRACE -->
+    <section id="panel" hidden>
+      <div class="admin__bar">
+        <div>Přihlášen(a): <strong id="kdo"></strong> <span class="tag" id="role"></span></div>
+        <div class="admin__bar-actions">
+          <button class="btn btn--sm btn--ghost" id="btn-heslo" type="button">Změnit heslo</button>
+          <button class="btn btn--sm btn--ghost" id="btn-odhlasit" type="button">Odhlásit</button>
+        </div>
+      </div>
+
+      <form id="heslo-form" class="card admin__form" hidden>
+        <h2>Změna hesla</h2>
+        <label>Nové heslo (aspoň 8 znaků)<input type="password" name="heslo1" minlength="8" autocomplete="new-password" required></label>
+        <label>Nové heslo znovu<input type="password" name="heslo2" minlength="8" autocomplete="new-password" required></label>
+        <div class="admin__row">
+          <button type="submit" class="btn btn--sm">Uložit heslo</button>
+          <button type="button" class="btn btn--sm btn--ghost" id="heslo-zrusit">Zrušit</button>
+        </div>
+        <p class="admin__msg" id="heslo-msg" role="alert"></p>
+      </form>
+
+      <div class="admin__tabs" role="tablist">
+        <button type="button" class="admin__tab is-active" data-tab="tab-aktuality">Aktuality</button>
+        <button type="button" class="admin__tab" data-tab="tab-galerie">Fotogalerie</button>
+      </div>
+
+      <!-- AKTUALITY -->
+      <div id="tab-aktuality" class="admin__tabpanel">
+        <form id="akt-form" class="card admin__form">
+          <h2 id="akt-form-nadpis">Nová aktualita</h2>
+          <label>Nadpis<input type="text" name="nadpis" maxlength="120" required></label>
+          <div class="admin__cols">
+            <label>Štítek<input type="text" name="stitek" list="stitky" maxlength="30" value="Klub" required></label>
+            <label>Datum (jak se zobrazí)<input type="text" name="datum_text" maxlength="40" placeholder="např. 29. 10. 2026"></label>
+          </div>
+          <datalist id="stitky">
+            <option value="Klub"><option value="Zápas"><option value="Sezóna"><option value="Turnaj"><option value="Nábor"><option value="Trénink">
+          </datalist>
+          <label>Text
+            <textarea name="text" rows="7" required></textarea>
+            <small class="admin__muted">Prázdný řádek = nový odstavec. Odkazy (https://…) se samy změní na klikací.</small>
+          </label>
+          <label class="admin__check"><input type="checkbox" name="pripnuto"> Připnout nahoru (zobrazí se vždy jako první)</label>
+          <div class="admin__row">
+            <button type="submit" class="btn btn--sm" id="akt-ulozit">Zveřejnit</button>
+            <button type="button" class="btn btn--sm btn--ghost" id="akt-zrusit" hidden>Zrušit úpravu</button>
+          </div>
+          <p class="admin__msg" id="akt-msg" role="alert"></p>
+        </form>
+
+        <h2 class="admin__h">Zveřejněné aktuality</h2>
+        <div id="akt-seznam" class="admin__list"></div>
+      </div>
+
+      <!-- GALERIE -->
+      <div id="tab-galerie" class="admin__tabpanel" hidden>
+        <form id="foto-form" class="card admin__form">
+          <h2>Přidat fotky</h2>
+          <label>Fotky (můžete vybrat víc najednou)<input type="file" name="soubory" accept="image/jpeg,image/png,image/webp,image/*" multiple required></label>
+          <label>Popisek (pro všechny vybrané fotky, jde později upravit)<input type="text" name="popisek" maxlength="120" placeholder="např. Trénink — říjen 2026"></label>
+          <small class="admin__muted">Fotky se před nahráním samy zmenší (max. 1600 px), takže je klidně nahrávejte rovnou z mobilu.</small>
+          <div class="admin__row"><button type="submit" class="btn btn--sm" id="foto-nahrat">Nahrát</button></div>
+          <p class="admin__msg" id="foto-msg" role="alert"></p>
+        </form>
+
+        <h2 class="admin__h">Fotky v galerii</h2>
+        <div id="foto-seznam" class="admin__photos"></div>
+      </div>
+    </section>
+
+    <p id="nacitani" class="admin__muted">Načítám…</p>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>
