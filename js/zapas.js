@@ -94,8 +94,6 @@
     });
     html += '<section class="section section--alt"><div class="container">' +
       '<div class="section__head"><h2>Jednotlivé výsledky</h2></div>' +
-      '<p class="admin__muted zapas-napoveda">Najetím myší na hráče se zvýrazní všechny jeho hry. ' +
-      'Kladné číslo = set vyhráli domácí, záporné = hosté.</p>' +
       '<div class="table-wrap"><table class="tabulka zapas-hry"><thead><tr><th>č.</th><th>' + esc(d.domaci.nazev) + '</th><th>' + esc(d.hoste.nazev) +
       '</th><th colspan="' + maxSetu + '">Výsledek hry</th><th>Sady</th><th>Body</th></tr></thead><tbody>' + radky.join('') + '</tbody></table></div>' +
       '</div></section>';
