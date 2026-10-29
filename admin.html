@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Administrace — TTC Bystřice</title>
 <link rel="icon" type="image/png" href="images/Logo.png">
-<link rel="stylesheet" href="css/style.css?v=3">
+<link rel="stylesheet" href="css/style.css?v=4">
 </head>
 <body class="admin">
 
@@ -94,14 +94,20 @@
         <form id="foto-form" class="card admin__form">
           <h2>Přidat fotky</h2>
           <label>Fotky (můžete vybrat víc najednou)<input type="file" name="soubory" accept="image/jpeg,image/png,image/webp,image/*" multiple required></label>
+          <label>Album (rok, do kterého fotky patří)<select name="rok" class="admin__select" data-roky></select></label>
           <label>Popisek (pro všechny vybrané fotky, jde později upravit)<input type="text" name="popisek" maxlength="120" placeholder="např. Trénink — říjen 2026"></label>
           <small class="admin__muted">Fotky se před nahráním samy zmenší (max. 1600 px), takže je klidně nahrávejte rovnou z mobilu.</small>
           <div class="admin__row"><button type="submit" class="btn btn--sm" id="foto-nahrat">Nahrát</button></div>
           <p class="admin__msg" id="foto-msg" role="alert"></p>
         </form>
 
-        <h2 class="admin__h">Fotky v galerii</h2>
-        <div id="foto-seznam" class="admin__photos"></div>
+        <div class="admin__h-row">
+          <h2 class="admin__h">Fotky v galerii</h2>
+          <label class="admin__filtr">Zobrazit album
+            <select id="foto-filtr" class="admin__select"><option value="">Všechna alba</option></select>
+          </label>
+        </div>
+        <div id="foto-seznam"></div>
       </div>
     </section>
 

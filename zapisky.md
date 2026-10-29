@@ -270,6 +270,10 @@ Oprávnění hlídá přímo databáze (soubor `supabase/schema.sql`), ne jen we
 - `js/supabase-config.js` — adresa projektu a veřejný klíč.
 - `js/obsah.js` — na hlavní stránce a v galerii načte aktuality a fotky z databáze.
 - `admin.html` + `js/admin.js` — přihlášení a formuláře administrace.
+- Fotogalerie je rozdělená do **alb podle let**: při nahrávání se vybere rok (album),
+  u nahrané fotky jde rok později změnit (tlačítko Uložit). Stránka `galerie.html`
+  ukazuje přehled alb, `galerie.html?rok=2026` fotky daného roku. Hlavní stránka
+  ukazuje 8 naposledy přidaných fotek bez ohledu na rok.
 - Fotky se před nahráním v prohlížeči zmenší na max. 1600 px (JPEG) a ukládají se
   do úložiště Supabase (Storage → bucket `galerie`).
 - `.github/workflows/supabase-probuzeni.yml` — každé 3 dny se připojí k databázi,

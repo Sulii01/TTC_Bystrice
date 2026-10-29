@@ -67,16 +67,65 @@
             'Fotky z tréninků a zápasů sem brzy přidáme.</div>';
           return;
         }
-        el.innerHTML = rows.map(function (f) {
-          return '<figure class="gallery-item">' +
-            '<img src="' + fotoUrl(f.cesta) + '" alt="' + esc(f.popisek || 'Fotka TTC Bystřice') + '" loading="lazy">' +
-            (f.popisek ? '<figcaption>' + esc(f.popisek) + '</figcaption>' : '') +
-            '</figure>';
-        }).join('');
+        el.innerHTML = rows.map(fotkaHtml).join('');
+      })
+      .catch(function () { chyba(el, 'Fotky'); });
+  }
+
+  function fotkaHtml(f) {
+    return '<figure class="gallery-item">' +
+      '<img src="' + fotoUrl(f.cesta) + '" alt="' + esc(f.popisek || 'Fotka TTC Bystřice') + '" loading="lazy">' +
+      (f.popisek ? '<figcaption>' + esc(f.popisek) + '</figcaption>' : '') +
+      '</figure>';
+  }
+
+  function pocetFotek(n) {
+    return n + (n === 1 ? ' fotka' : n >= 2 && n <= 4 ? ' fotky' : ' fotek');
+  }
+
+  // Stránka Galerie: bez parametru přehled alb (po letech), s ?rok=2026 fotky daného roku.
+  function nactiAlba(el) {
+    var rok = parseInt(new URLSearchParams(location.search).get('rok'), 10);
+    api('galerie?select=cesta,popisek,rok&order=vytvoreno.desc')
+      .then(function (rows) {
+        if (!rows.length) {
+          el.innerHTML = '<div class="gallery-empty"><strong>Galerie zatím čeká na první fotky</strong>' +
+            'Fotky z tréninků a zápasů sem brzy přidáme.</div>';
+          return;
+        }
+        var alba = {};
+        rows.forEach(function (f) { (alba[f.rok] = alba[f.rok] || []).push(f); });
+        var roky = Object.keys(alba).map(Number).sort(function (a, b) { return b - a; });
+
+        if (rok && alba[rok]) {
+          document.title = 'Fotogalerie ' + rok + ' — TTC Bystřice';
+          var drobek = document.querySelector('.breadcrumb');
+          if (drobek) drobek.innerHTML = '<a href="index.html">Domů</a> / <a href="galerie.html">Fotogalerie</a> / ' + rok;
+          var jine = roky.filter(function (r) { return r !== rok; }).map(function (r) {
+            return '<a href="galerie.html?rok=' + r + '" class="album-nav__rok">' + r + '</a>';
+          }).join('');
+          el.innerHTML =
+            '<div class="album-head">' +
+              '<div><h2>Album ' + rok + '</h2><span class="album-head__pocet">' + pocetFotek(alba[rok].length) + '</span></div>' +
+              '<div class="album-nav"><a href="galerie.html" class="btn btn--sm btn--ghost">← Všechna alba</a>' + jine + '</div>' +
+            '</div>' +
+            '<div class="gallery-grid">' + alba[rok].map(fotkaHtml).join('') + '</div>';
+          return;
+        }
+
+        el.innerHTML = '<div class="album-grid">' + roky.map(function (r) {
+          var titulni = alba[r][0];
+          return '<a href="galerie.html?rok=' + r + '" class="album-card">' +
+            '<div class="album-card__img"><img src="' + fotoUrl(titulni.cesta) + '" alt="" loading="lazy"></div>' +
+            '<div class="album-card__body"><span class="album-card__rok">' + r + '</span>' +
+            '<span class="album-card__pocet">' + pocetFotek(alba[r].length) + '</span></div>' +
+            '</a>';
+        }).join('') + '</div>';
       })
       .catch(function () { chyba(el, 'Fotky'); });
   }
 
   document.querySelectorAll('[data-obsah="aktuality"]').forEach(nactiAktuality);
+  document.querySelectorAll('[data-obsah="galerie-alba"]').forEach(nactiAlba);
   document.querySelectorAll('[data-obsah="galerie"]').forEach(nactiGalerii);
 })();
