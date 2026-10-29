@@ -282,15 +282,45 @@ def render_tabulka(rows):
     return "\n    ".join(body)
 
 
+NAS_NAZEV = "Bystřice"   # podle tohoto slova se v rozpisu pozná naše družstvo
+
+
+def _vysledek_nas(m):
+    # Výsledek z pohledu Bystřice: "win" / "loss" / "draw", případně None (neodehráno, nečitelné).
+    sc = re.match(r"^(\d+):(\d+)$", m.get("vysledek") or "")
+    if not sc:
+        return None
+    d, h = int(sc.group(1)), int(sc.group(2))
+    if NAS_NAZEV in m["domaci"]:
+        nase, souper = d, h
+    elif NAS_NAZEV in m["hoste"]:
+        nase, souper = h, d
+    else:
+        return None
+    return "win" if nase > souper else "loss" if nase < souper else "draw"
+
+
 def render_rozpis(matches):
-    body = ['<div class="table-wrap">', '  <table class="tabulka">', "    <thead>",
+    body = ['<div class="table-wrap">', '  <table class="tabulka rozpis">', "    <thead>",
             "      <tr><th>Kolo</th><th>Datum</th><th>Domácí</th><th>Hosté</th><th>Výsledek</th></tr>",
             "    </thead>", "    <tbody>"]
+    stitky = {"win": "Výhra", "loss": "Prohra", "draw": "Remíza"}
     for m in matches:
-        vysl = m["vysledek"] or "—"
+        def tym(nazev):
+            return f'<strong class="rozpis__nas">{nazev}</strong>' if NAS_NAZEV in nazev else nazev
+        stav = _vysledek_nas(m)
+        if not m["vysledek"]:
+            vysl = '<span class="rozpis__ceka">—</span>'
+        else:
+            skore = (f'<a href="{m["odkaz"]}" target="_blank" rel="noopener" title="Zápis o utkání na STIS">'
+                     f'{m["vysledek"]}</a>') if m.get("odkaz") else m["vysledek"]
+            vysl = f'<span class="rozpis__skore">{skore}</span>'
+            if stav:
+                vysl += f' <span class="rozpis__stav rozpis__stav--{stav}">{stitky[stav]}</span>'
+        cls = f' class="rozpis--{stav}"' if stav else ""
         body.append(
-            f'      <tr><td>{m["kolo"]}</td><td>{m["datum"]}</td><td>{m["domaci"]}</td>'
-            f'<td>{m["hoste"]}</td><td>{vysl}</td></tr>'
+            f'      <tr{cls}><td>{m["kolo"]}</td><td>{m["datum"]}</td><td>{tym(m["domaci"])}</td>'
+            f'<td>{tym(m["hoste"])}</td><td>{vysl}</td></tr>'
         )
     body += ["    </tbody>", "  </table>", "</div>"]
     return "\n    ".join(body)
