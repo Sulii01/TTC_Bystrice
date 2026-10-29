@@ -94,7 +94,7 @@
     });
     html += '<section class="section section--alt"><div class="container">' +
       '<div class="section__head"><h2>Jednotlivé výsledky</h2></div>' +
-      '<p class="admin__muted zapas-napoveda">Najetím (nebo klepnutím) na hráče se zvýrazní všechny jeho hry. ' +
+      '<p class="admin__muted zapas-napoveda">Najetím myší na hráče se zvýrazní všechny jeho hry. ' +
       'Kladné číslo = set vyhráli domácí, záporné = hosté.</p>' +
       '<div class="table-wrap"><table class="tabulka zapas-hry"><thead><tr><th>č.</th><th>' + esc(d.domaci.nazev) + '</th><th>' + esc(d.hoste.nazev) +
       '</th><th colspan="' + maxSetu + '">Výsledek hry</th><th>Sady</th><th>Body</th></tr></thead><tbody>' + radky.join('') + '</tbody></table></div>' +
@@ -113,17 +113,16 @@
       '<div class="section__head"><h2>Statistika jednotlivých hráčů</h2></div>' +
       '<div class="grid grid--2">' +
         '<div><h3 class="zapas-stat__tym">' + esc(d.domaci.nazev) + '</h3>' +
-          '<div class="table-wrap"><table class="tabulka"><thead><tr><th>Hráč</th><th>Výhry : prohry</th></tr></thead><tbody>' + statRadky(st.domaci, nasDomaci) + '</tbody></table></div></div>' +
+          '<div class="table-wrap"><table class="tabulka zapas-stat"><thead><tr><th>Hráč</th><th>Výhry : prohry</th></tr></thead><tbody>' + statRadky(st.domaci, nasDomaci) + '</tbody></table></div></div>' +
         '<div><h3 class="zapas-stat__tym">' + esc(d.hoste.nazev) + '</h3>' +
-          '<div class="table-wrap"><table class="tabulka"><thead><tr><th>Hráč</th><th>Výhry : prohry</th></tr></thead><tbody>' + statRadky(st.hoste, nasHoste) + '</tbody></table></div></div>' +
+          '<div class="table-wrap"><table class="tabulka zapas-stat"><thead><tr><th>Hráč</th><th>Výhry : prohry</th></tr></thead><tbody>' + statRadky(st.hoste, nasHoste) + '</tbody></table></div></div>' +
       '</div>' +
       (tymUrl ? '<p style="margin-top:22px"><a href="' + tymUrl + '" class="btn btn--sm btn--ghost">← Zpět na tým ' + d.tym + '</a></p>' : '') +
       '</div></section>';
 
     $('zapas-obsah').innerHTML = html;
 
-    // zvýraznění všech her jednoho hráče (jako na STIS)
-    var aktivni = null;
+    // zvýraznění všech her jednoho hráče při najetí myší (jako na STIS)
     function zvyrazni(pid) {
       document.querySelectorAll('.zapas-hrac').forEach(function (el) {
         el.classList.toggle('is-hl', !!pid && el.getAttribute('data-hrac') === pid);
@@ -134,17 +133,10 @@
     }
     var obsah = $('zapas-obsah');
     obsah.addEventListener('mouseover', function (e) {
-      var h = e.target.closest('.zapas-hrac'); if (h && !aktivni) zvyrazni(h.getAttribute('data-hrac'));
+      var h = e.target.closest('.zapas-hrac'); if (h) zvyrazni(h.getAttribute('data-hrac'));
     });
     obsah.addEventListener('mouseout', function (e) {
-      if (e.target.closest('.zapas-hrac') && !aktivni) zvyrazni(null);
-    });
-    obsah.addEventListener('click', function (e) {   // na mobilu: klepnutí zvýraznění zapne / vypne
-      var h = e.target.closest('.zapas-hrac');
-      if (!h || e.target.closest('a')) return;
-      var pid = h.getAttribute('data-hrac');
-      aktivni = aktivni === pid ? null : pid;
-      zvyrazni(aktivni);
+      if (e.target.closest('.zapas-hrac')) zvyrazni(null);
     });
   }
 })();
