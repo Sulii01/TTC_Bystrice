@@ -1,0 +1,19 @@
+name: Dočasný průzkum STIS (zápisy)
+on:
+  push:
+    branches: [claude/nice-volta-gaw8ow]
+    paths: [debug/stahni_ukazky.py]
+permissions:
+  contents: write
+jobs:
+  stahni:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: python debug/stahni_ukazky.py
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add debug/ukazky && git commit -m "Průzkum STIS: ukázkové zápisy" && git push
