@@ -3,5 +3,6 @@
 window.TTC_SUPABASE = {
   url: 'https://fptbjlorsntkhvxwipbk.supabase.co',
   key: 'sb_publishable_CSbr0yhY2wwplXYcohfMfQ_URL_W_e0',
-  bucket: 'galerie'
+  bucket: 'galerie',            // fotky fotogalerie
+  bucketAktuality: 'aktuality'  // fotky u aktualit
 };

@@ -1,0 +1,10 @@
+Fotky hráčů pro stránku hrac.html
+=================================
+
+1. Fotku pojmenujte podle ID hráče na STIS a uložte sem jako JPG:
+      images/hraci/43941.jpg
+   ID je číslo v adrese stránky hráče na webu: hrac.html?id=43941
+   (nebo v odkazu na STIS: .../hrac-43941/...).
+2. Ideálně na výšku nebo čtverec, cca 600 × 800 px, do 300 kB.
+3. Nahrajte do repozitáře (commit + push) — po pár minutách se fotka sama zobrazí.
+   Dokud fotka chybí, je na stránce hráče prázdné pole s ikonou.

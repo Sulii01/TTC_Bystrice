@@ -270,6 +270,9 @@ Oprávnění hlídá přímo databáze (soubor `supabase/schema.sql`), ne jen we
 - `js/supabase-config.js` — adresa projektu a veřejný klíč.
 - `js/obsah.js` — na hlavní stránce a v galerii načte aktuality a fotky z databáze.
 - `admin.html` + `js/admin.js` — přihlášení a formuláře administrace.
+- K aktualitě jde přidat **fotku** (nepovinně): nahraje se do úložiště Supabase
+  (Storage → bucket `aktuality`), na webu se ukáže nahoře v kartě aktuality a po kliknutí
+  se zvětší. Při úpravě aktuality jde fotku vyměnit nebo odebrat.
 - Fotogalerie je rozdělená do **alb podle let**: při nahrávání se vybere rok (album),
   u nahrané fotky jde rok později změnit (tlačítko Uložit). Stránka `galerie.html`
   ukazuje přehled alb, `galerie.html?rok=2026` fotky daného roku. Hlavní stránka
@@ -293,6 +296,9 @@ po sezónách, historii sezón, všechny zápasy po sezónách a statistiku soup
   hráče je v souboru `stis_hraci.py`.
 - Když STIS stránku hráče zrovna nevrátí, zůstanou jeho předchozí data.
 - Graf kreslí knihovna Chart.js (načítá se z cdn.jsdelivr.net).
+- **Fotka hráče** se přidává ručně do repozitáře jako `images/hraci/ID.jpg`
+  (ID = číslo v adrese `hrac.html?id=…`), návod je v `images/hraci/JAK-PRIDAT-FOTKU.txt`.
+  Dokud fotka chybí, ukazuje se prázdné pole „Fotka zatím není“.
 
 ---
 

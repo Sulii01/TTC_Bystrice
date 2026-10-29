@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Administrace — TTC Bystřice</title>
 <link rel="icon" type="image/png" href="images/Logo.png">
-<link rel="stylesheet" href="css/style.css?v=9">
+<link rel="stylesheet" href="css/style.css?v=10">
 </head>
 <body class="admin">
 
@@ -77,6 +77,14 @@
             <textarea name="text" rows="7" required></textarea>
             <small class="admin__muted">Prázdný řádek = nový odstavec. Odkazy (https://…) se samy změní na klikací.</small>
           </label>
+          <label>Fotka (nepovinná)
+            <input type="file" name="foto" accept="image/jpeg,image/png,image/webp,image/*">
+            <small class="admin__muted">Fotka se před nahráním sama zmenší. Na webu se zobrazí nahoře v kartě aktuality.</small>
+          </label>
+          <div id="akt-foto-nahled" class="admin__foto-nahled" hidden>
+            <img src="" alt="Současná fotka aktuality">
+            <label class="admin__check"><input type="checkbox" name="foto_odebrat"> Odebrat fotku</label>
+          </div>
           <label class="admin__check"><input type="checkbox" name="pripnuto"> Připnout nahoru (zobrazí se vždy jako první)</label>
           <div class="admin__row">
             <button type="submit" class="btn btn--sm" id="akt-ulozit">Zveřejnit</button>
@@ -116,7 +124,7 @@
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js"></script>
-<script src="js/supabase-config.js?v=9"></script>
-<script src="js/admin.js?v=9"></script>
+<script src="js/supabase-config.js?v=10"></script>
+<script src="js/admin.js?v=10"></script>
 </body>
 </html>

@@ -42,8 +42,8 @@
     var d = new Date();
     return d.getDate() + '. ' + (d.getMonth() + 1) + '. ' + d.getFullYear();
   }
-  function fotoUrl(cesta) {
-    return sb.storage.from(cfg.bucket).getPublicUrl(cesta).data.publicUrl;
+  function fotoUrl(cesta, bucket) {
+    return sb.storage.from(bucket || cfg.bucket).getPublicUrl(cesta).data.publicUrl;
   }
   function cesky(err) {
     var m = (err && (err.message || err.error_description)) || String(err);
@@ -142,6 +142,7 @@
             : '<span class="admin__muted">jen autor / admin</span>';
           return '<div class="admin__item">' +
             '<div><span class="tag">' + esc(a.stitek) + '</span>' + (a.pripnuto ? ' <span class="tag tag--pin">Připnuto</span>' : '') +
+            (a.foto ? ' <span class="tag tag--foto">Fotka</span>' : '') +
             '<strong class="admin__item-title">' + esc(a.nadpis) + '</strong>' +
             '<span class="admin__muted">' + esc(a.datum_text || '') + '</span></div>' +
             '<div class="admin__item-actions">' + akce + '</div></div>';
@@ -155,6 +156,7 @@
     f.reset();
     f.datum_text.value = dnes();
     upravujeId = null;
+    $('akt-foto-nahled').hidden = true;
     $('akt-form-nadpis').textContent = 'Nová aktualita';
     $('akt-ulozit').textContent = 'Zveřejnit';
     $('akt-zrusit').hidden = true;
@@ -171,17 +173,43 @@
       text: f.text.value.trim(),
       pripnuto: f.pripnuto.checked
     };
-    var dotaz = upravujeId
-      ? sb.from('aktuality').update(data).eq('id', upravujeId).select()
-      : sb.from('aktuality').insert(data).select();
-    zprava('akt-msg', 'Ukládám…', true);
-    dotaz.then(function (res) {
+    var B = cfg.bucketAktuality;
+    var soubor = f.foto.files[0];
+    var odebrat = f.foto_odebrat.checked;
+    var puvodni = upravujeId ? (aktuality.find(function (x) { return x.id === upravujeId; }) || {}).foto : null;
+    var novaCesta = null;
+    $('akt-ulozit').disabled = true;
+    zprava('akt-msg', soubor ? 'Nahrávám fotku…' : 'Ukládám…', true);
+
+    // 1) případně nahrát novou fotku
+    var krok = Promise.resolve();
+    if (soubor) {
+      var d = new Date();
+      novaCesta = d.getFullYear() + '/' + Date.now() + '-' + Math.random().toString(36).slice(2, 8) + '.jpg';
+      krok = zmensi(soubor).then(function (blob) {
+        return sb.storage.from(B).upload(novaCesta, blob, { contentType: 'image/jpeg', cacheControl: '31536000' });
+      }).then(function (res) { if (res.error) throw res.error; data.foto = novaCesta; });
+    } else if (odebrat) {
+      data.foto = null;
+    }
+    // 2) starou fotku smazat dřív, než ji záznam přestane uvádět (pravidlo pro editory to ověřuje podle záznamu)
+    krok.then(function () {
+      if (puvodni && (soubor || odebrat)) return sb.storage.from(B).remove([puvodni]);
+    }).then(function () {
+      zprava('akt-msg', 'Ukládám…', true);
+      return upravujeId
+        ? sb.from('aktuality').update(data).eq('id', upravujeId).select()
+        : sb.from('aktuality').insert(data).select();
+    }).then(function (res) {
       if (res.error) throw res.error;
       if (!res.data || !res.data.length) throw new Error('permission denied');
       zprava('akt-msg', upravujeId ? 'Aktualita byla upravena.' : 'Aktualita je zveřejněná na webu.', true);
       resetAktForm();
       nactiAktuality();
-    }).catch(function (err) { zprava('akt-msg', cesky(err)); });
+    }).catch(function (err) {
+      if (novaCesta && !upravujeId) sb.storage.from(B).remove([novaCesta]);   // nepovedené vložení: uklidit fotku
+      zprava('akt-msg', cesky(err));
+    }).then(function () { $('akt-ulozit').disabled = false; });
   });
 
   $('akt-seznam').addEventListener('click', function (e) {
@@ -192,6 +220,9 @@
       var f = $('akt-form');
       f.nadpis.value = a.nadpis; f.stitek.value = a.stitek; f.datum_text.value = a.datum_text || '';
       f.text.value = a.text; f.pripnuto.checked = a.pripnuto;
+      f.foto.value = ''; f.foto_odebrat.checked = false;
+      $('akt-foto-nahled').hidden = !a.foto;
+      if (a.foto) $('akt-foto-nahled').querySelector('img').src = fotoUrl(a.foto, cfg.bucketAktuality);
       upravujeId = a.id;
       $('akt-form-nadpis').textContent = 'Úprava aktuality';
       $('akt-ulozit').textContent = 'Uložit změny';
@@ -202,7 +233,10 @@
     if (sm) {
       var b = aktuality.find(function (x) { return String(x.id) === sm; });
       if (!confirm('Opravdu smazat aktualitu „' + b.nadpis + '“?')) return;
-      sb.from('aktuality').delete().eq('id', sm).select().then(function (res) {
+      // nejdřív fotka (pravidlo pro editory ji pozná podle záznamu), pak záznam
+      (b.foto ? sb.storage.from(cfg.bucketAktuality).remove([b.foto]) : Promise.resolve()).then(function () {
+        return sb.from('aktuality').delete().eq('id', sm).select();
+      }).then(function (res) {
         if (res.error) throw res.error;
         if (!res.data || !res.data.length) throw new Error('permission denied');
         if (String(upravujeId) === sm) resetAktForm();

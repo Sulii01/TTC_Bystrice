@@ -834,3 +834,30 @@ table.tabulka tr.tabulka--nas td{ color: var(--yellow); font-weight: 600; }
 @media (prefers-reduced-motion: reduce){
   *{ transition: none !important; scroll-behavior: auto !important; }
 }
+
+/* fotka u aktuality */
+.news-card--foto{ padding-top: 0; }
+.news-card__foto{
+  margin: 0 -26px 14px; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 0; cursor: zoom-in;
+}
+.news-card__foto img{ width: 100%; height: 100%; object-fit: cover; transition: transform .35s ease; }
+.news-card:hover .news-card__foto img{ transform: scale(1.04); }
+.tag--foto{ background: transparent; color: var(--yellow); box-shadow: inset 0 0 0 1px var(--yellow); }
+.admin__foto-nahled{ display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.admin__foto-nahled img{ width: 180px; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 10px; border: 1px solid var(--card-border); }
+
+/* fotka hráče (images/hraci/ID.jpg) */
+.hrac-foto{
+  width: 120px; height: 150px; flex-shrink: 0; border-radius: 14px; overflow: hidden;
+  background: #111; border: 1px dashed #333; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 6px; color: var(--grey-dark);
+}
+.hrac-foto svg{ width: 54px; height: 54px; fill: #2a2a2a; }
+.hrac-foto span{ font-size: .7rem; text-align: center; padding: 0 8px; line-height: 1.2; }
+.hrac-foto.has-foto{ border: 2px solid var(--yellow); }
+.hrac-foto img{ width: 100%; height: 100%; object-fit: cover; }
+@media (max-width: 600px){ .hrac-foto{ width: 96px; height: 120px; } }
+/* aktuality: karta má vždy šířku jednoho sloupce, i když je aktualita jen jedna */
+#aktuality .grid{ grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
+/* hlavička týmu / hráče: jméno a štítky vedle fotky, ne pod ní */
+.team-hero__info{ flex: 1 1 320px; min-width: 0; }

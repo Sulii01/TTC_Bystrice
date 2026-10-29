@@ -57,6 +57,12 @@
     $('h-drobek').innerHTML = '<a href="index.html">Domů</a> / ' +
       (tym ? '<a href="' + TYMY[tym] + '">Tým ' + tym + '</a>' : '<a href="index.html#tymy">Týmy</a>') + ' / ' + esc(d.jmeno);
     $('h-jmeno').textContent = d.jmeno;
+    // fotka hráče: images/hraci/ID.jpg (přidává se ručně do repozitáře); když chybí, zůstane prázdné pole
+    var foto = $('h-foto');
+    var img = new Image();
+    img.alt = d.jmeno;
+    img.onload = function () { foto.innerHTML = ''; foto.appendChild(img); foto.classList.add('has-foto'); };
+    img.src = 'images/hraci/' + d.id + '.jpg';
     $('h-str').innerHTML = ster.str ? '<span class="hrac-str__lbl">STR</span>' + ster.str : '–';
     $('h-str').classList.add('hrac-str');
     var pills = [];
