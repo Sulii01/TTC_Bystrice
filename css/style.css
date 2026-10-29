@@ -576,6 +576,7 @@ table.rozpis .rozpis__ceka{ color: var(--grey-dark); }
 /* prázdná / načítací hláška přes celou šířku mřížky */
 .grid > .gallery-empty, .gallery-grid > .gallery-empty{ grid-column: 1 / -1; }
 .news-card p + p{ margin-top: 10px; }
+.footer__admin{ color: var(--grey-dark) !important; }
 
 /* ---------- Administrace (admin.html) ---------- */
 [hidden]{ display: none !important; }
