@@ -714,3 +714,44 @@ table.tabulka td a:hover{ color: var(--yellow); }
   .stat-card{ padding: 12px 14px; }
   .stat-card strong{ font-size: 1.35rem; }
 }
+
+/* ---------- Zápis o utkání (zapas.html) ---------- */
+.zapas-skore{ text-align: center; padding: 10px 0 18px; }
+.zapas-skore h1{ margin: 0; }
+.zapas-skore__meta{ color: var(--grey); font-size: .9rem; }
+.zapas-skore__radek{
+  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 24px; margin: 14px 0;
+}
+.zapas-skore__tym{ font-family: 'Oswald', sans-serif; font-size: 1.6rem; font-weight: 700; color: var(--grey); line-height: 1.2; }
+.zapas-skore__tym:first-child{ text-align: right; }
+.zapas-skore__tym:last-child{ text-align: left; }
+.zapas-skore__tym a{ color: inherit; }
+.zapas-skore__tym.is-winner{ color: var(--white); }
+.zapas-skore__cislo{ font-family: 'Oswald', sans-serif; font-size: 3.4rem; font-weight: 700; line-height: 1; white-space: nowrap; }
+.zapas-skore__cislo .is-winner{ color: var(--yellow); }
+.zapas-skore__cislo .is-loser{ color: var(--grey-dark); }
+.zapas-vitez{ font-size: 1.15rem !important; }
+.zapas-info li strong{ font-weight: 600; }
+.zapas-napoveda{ margin: -6px 0 14px; }
+table.zapas-hry td{ vertical-align: middle; }
+table.zapas-hry td.zapas-strana{ white-space: nowrap; color: var(--grey); }
+table.zapas-hry td.zapas-strana.is-winner{ color: var(--white); font-weight: 700; }
+table.zapas-hry td.zapas-strana a{ color: inherit; }
+table.zapas-hry td.zapas-strana.is-winner a{ color: var(--yellow); }
+table.zapas-hry .zapas-set{ text-align: center; width: 38px; padding-left: 4px; padding-right: 4px; color: var(--grey-dark); }
+table.zapas-hry .zapas-set.set-d, table.zapas-hry .zapas-set.set-h{ color: var(--white); }
+table.zapas-hry .zapas-sady{ text-align: center; font-weight: 700; }
+table.zapas-hry .zapas-stav{ text-align: center; color: var(--yellow); font-family: 'Oswald', sans-serif; }
+table.zapas-hry tr.zapas-ctyrhra{ background: rgba(255,255,255,.03); }
+table.zapas-hry tr.zapas-neodehrano td{ opacity: .45; }
+table.zapas-hry tr.is-hl{ background: rgba(247,198,0,.14) !important; }
+.zapas-hrac{ cursor: pointer; border-radius: 3px; }
+.zapas-hrac.is-hl{ background: var(--yellow); color: var(--black) !important; padding: 0 3px; }
+.zapas-hrac.is-hl a{ color: var(--black) !important; }
+.zapas-stat__tym{ margin: 0 0 10px; color: var(--yellow); font-size: 1.1rem; }
+@media (max-width: 700px){
+  .zapas-skore__radek{ grid-template-columns: 1fr; gap: 6px; }
+  .zapas-skore__tym:first-child, .zapas-skore__tym:last-child{ text-align: center; }
+  .zapas-skore__tym{ font-size: 1.25rem; }
+  .zapas-skore__cislo{ font-size: 2.8rem; }
+}

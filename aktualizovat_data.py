@@ -42,6 +42,7 @@ from http.cookiejar import CookieJar
 from html import unescape as html_unescape
 
 import stis_hraci
+import stis_zapisy
 
 BASE = "https://stis.ping-pong.cz"
 SVAZ = "420802"
@@ -318,8 +319,8 @@ def render_rozpis(matches):
         if not m["vysledek"]:
             vysl = '<span class="rozpis__ceka">—</span>'
         else:
-            skore = (f'<a href="{m["odkaz"]}" target="_blank" rel="noopener" title="Zápis o utkání na STIS">'
-                     f'{m["vysledek"]}</a>') if m.get("odkaz") else m["vysledek"]
+            skore = (f'<a href="zapas.html?id={zapis_id(m["odkaz"])}" title="Zápis o utkání">'
+                     f'{m["vysledek"]}</a>') if zapis_id(m.get("odkaz")) else m["vysledek"]
             vysl = f'<span class="rozpis__skore">{skore}</span>'
             if stav:
                 vysl += f' <span class="rozpis__stav rozpis__stav--{stav}">{stitky[stav]}</span>'
@@ -361,6 +362,17 @@ def render_soupiska(players):
     )
 
 
+def zapis_id(odkaz):
+    # ".../zapis/.../utkani-672666" -> "672666"
+    m = re.search(r"utkani-(\d+)", odkaz or "")
+    return m.group(1) if m else None
+
+
+def render_zapas_tlacitko(odkaz):
+    return (f'<a href="zapas.html?id={zapis_id(odkaz)}" class="btn btn--sm btn--ghost">'
+            "Detail zápasu →</a>")
+
+
 def render_stis_tlacitko(url):
     return (f'<a href="{url}" target="_blank" rel="noopener" class="btn btn--sm btn--ghost">'
             "Výsledky na STIS ↗</a>")
@@ -390,7 +402,8 @@ def render_vysledek_karta(last_match, team):
         '<span class="result-card__dash"> –</span></span> '
         f'<span class="result-card__side"><span class="{cls_h}">{last_match["hoste"]}</span></span></div>'
         f'<div class="result-card__meta">{last_match["datum"]}</div>'
-        + render_stis_tlacitko(last_match.get("odkaz") or team_url)
+        + (render_zapas_tlacitko(last_match["odkaz"]) if zapis_id(last_match.get("odkaz"))
+           else render_stis_tlacitko(team_url))
     )
 
 
@@ -467,6 +480,48 @@ def aktualizuj_hrace(opener, hraci):
     print(f"  -> aktualizováno hráčů: {zmeneno}")
 
 
+def aktualizuj_zapisy(opener, zapisy):
+    """Stáhne ze STIS zápis každého odehraného utkání našich družstev do data/zapisy/ID.json.
+    Zápisy starší než 14 dní se znovu nestahují (už se nemění); novější se kontrolují
+    při každém běhu, kdyby STIS ještě doplnil nebo opravil výsledek."""
+    from datetime import date
+    if not zapisy:
+        return
+    out_dir = os.path.join(ROOT, "data", "zapisy")
+    os.makedirs(out_dir, exist_ok=True)
+    print(f"\nZápisy o utkání: {len(zapisy)}")
+    stazeno = zmeneno = 0
+    for zid, info in sorted(zapisy.items()):
+        path = os.path.join(out_dir, f"{zid}.json")
+        m = re.search(r"(\d{1,2})\.(\d{1,2})\.(\d{4})", info["datum"])
+        stary = m and (date.today() - date(int(m.group(3)), int(m.group(2)), int(m.group(1)))).days > 14
+        if os.path.exists(path) and stary:
+            continue
+        try:
+            data = stis_zapisy.parse_zapis(fetch(opener, info["stis_cesta"]))
+        except Exception as e:
+            print(f"  [!] zápis {zid}: {e}")
+            continue
+        stazeno += 1
+        if not data or not data.get("hry"):
+            print(f"  [!] zápis {zid}: nepodařilo se přečíst, ponechávám beze změny")
+            continue
+        data["id"] = zid
+        data["tym"] = info["tym"]
+        text = json.dumps(data, ensure_ascii=False, separators=(",", ":"))
+        if (load(path) if os.path.exists(path) else None) != text:
+            save(path, text)
+            zmeneno += 1
+        time.sleep(0.3)
+    # seznam dostupných zápisů (stránka hráče podle něj pozná, které zápasy mají detail)
+    ids = sorted(f[:-5] for f in os.listdir(out_dir) if f.endswith(".json") and f != "index.json")
+    index = json.dumps(ids, separators=(",", ":"))
+    ip = os.path.join(out_dir, "index.json")
+    if (load(ip) if os.path.exists(ip) else None) != index:
+        save(ip, index)
+    print(f"  -> staženo {stazeno}, změněno {zmeneno}, celkem k dispozici {len(ids)}")
+
+
 def main():
     opener = make_opener()
     print("Připojuji se na STIS...")
@@ -474,6 +529,7 @@ def main():
     all_last_matches = {}
     upcoming_by_letter = {}
     all_tables = {}
+    zapisy = {}       # ID utkání -> {"stis_cesta": ..., "datum": ..., "tym": "A"} (odehraná utkání)
     hraci = {}        # ID hráče -> {"stis_cesta": ..., "tymy": ["A", ...]} ze všech našich soupisek
     teams_with_los_data = set()
 
@@ -508,6 +564,10 @@ def main():
             print(f"  rozpis: {len(matches)} utkání (aktualizováno)")
 
             played = [m for m in matches if m["vysledek"]]
+            for m in played:
+                zid = zapis_id(m.get("odkaz"))
+                if zid:
+                    zapisy[zid] = {"stis_cesta": m["odkaz"].replace(BASE, ""), "datum": m["datum"], "tym": letter}
             if played:
                 all_last_matches[letter] = played[-1]
             future = [m for m in matches if not m["vysledek"]]
@@ -536,6 +596,8 @@ def main():
 
     # detaily hráčů (stránka hrac.html čte data/hraci/ID.json)
     aktualizuj_hrace(opener, hraci)
+    # zápisy o utkání (stránka zapas.html čte data/zapisy/ID.json)
+    aktualizuj_zapisy(opener, zapisy)
 
     # index.html — výsledky posledních zápasů, nejbližší zápasy, tabulky soutěží
     index_path = os.path.join(ROOT, "index.html")
