@@ -1,26 +1,28 @@
 /* ==========================================================================
    TTC Bystřice — hlavní styl
-   Barevná paleta vychází z klubového loga a banneru (žlutá / černá / červená)
+   Barevná paleta vychází z klubového banneru: sytá citronová žlutá + čistá černá
    ========================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Rajdhani:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
 
 :root{
-  --bg:            #0c0c0b;
-  --bg-alt:        #151412;
-  --card:          #1b1a17;
-  --card-border:   #302c22;
-  --yellow:        #f7c600;
-  --yellow-dark:   #c99e00;
-  --red:           #d9202f;
-  --black:         #050505;
-  --white:         #f5f4ef;
-  --grey:          #b7b3a8;
-  --grey-dark:     #8a867c;
-  --radius:        10px;
-  --shadow:        0 10px 30px rgba(0,0,0,.45);
-  --maxw:          1180px;
-  font-size: 19px; /* základní velikost textu celého webu — zvyšte/snižte toto číslo a přeškáluje se skoro vše */
+  --bg:            #000000;   /* čistá černá jako v banneru */
+  --bg-alt:        #0a0a0a;
+  --card:          #111111;
+  --card-border:   #222222;
+  --yellow:        #ffe600;   /* sytá žlutá z banneru */
+  --yellow-dark:   #d6c100;
+  --yellow-soft:   rgba(255,230,0,.12);
+  --red:           #ffe600;   /* dřívější červené akcenty jsou teď žluté */
+  --danger:        #ff5c5c;   /* jen pro chybové hlášky a mazání v administraci */
+  --black:         #000000;
+  --white:         #ffffff;
+  --grey:          #b3b3b3;
+  --grey-dark:     #7a7a7a;
+  --radius:        16px;
+  --shadow:        0 18px 40px rgba(0,0,0,.6);
+  --maxw:          1200px;
+  font-size: 18px; /* základní velikost textu celého webu — zvyšte/snižte toto číslo a přeškáluje se skoro vše */
 }
 
 *, *::before, *::after{ box-sizing: border-box; }
@@ -31,9 +33,10 @@ body{
   margin: 0;
   background: var(--bg);
   color: var(--white);
-  font-family: 'Rajdhani', 'Segoe UI', Arial, sans-serif;
-  font-size: 1.15rem;
-  line-height: 1.6;
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  font-size: .95rem;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
 }
 
 h1, h2, h3, h4, .brand__name, .btn, nav a, .team-card__name{
@@ -68,19 +71,16 @@ img{ max-width: 100%; display: block; }
   justify-content: space-between;
   gap: 16px;
   flex-wrap: wrap;
-  border-bottom: 2px solid var(--card-border);
-  padding-bottom: 14px;
-  margin-bottom: 32px;
+  margin-bottom: 30px;
 }
-.section__head h2{ margin: 0; }
+.section__head h2{ margin: 0; letter-spacing: .01em; }
 .section__head h2::before{
   content: "";
-  display: inline-block;
-  width: 10px; height: 10px;
-  background: var(--red);
-  margin-right: 12px;
-  transform: rotate(45deg);
-  vertical-align: middle;
+  display: block;
+  width: 44px; height: 4px;
+  background: var(--yellow);
+  border-radius: 2px;
+  margin-bottom: 14px;
 }
 
 /* ---------- Buttons ---------- */
@@ -88,29 +88,31 @@ img{ max-width: 100%; display: block; }
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 11px 22px;
-  border-radius: 4px;
+  padding: 12px 26px;
+  border-radius: 999px;
   font-weight: 600;
-  font-size: .92rem;
+  font-size: .9rem;
+  letter-spacing: .04em;
   border: 2px solid var(--yellow);
   color: var(--black);
   background: var(--yellow);
   cursor: pointer;
   transition: all .18s ease;
 }
-.btn:hover{ background: var(--white); border-color: var(--white); color: var(--black); }
+.btn:hover{ background: var(--white); border-color: var(--white); color: var(--black); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(255,230,0,.25); }
 .btn--ghost{ background: transparent; color: var(--yellow); }
 .btn--ghost:hover{ background: var(--yellow); color: var(--black); }
-.btn--sm{ padding: 7px 14px; font-size: .8rem; }
+.btn--sm{ padding: 8px 18px; font-size: .78rem; }
 
 /* ---------- Header / nav ---------- */
 header.site{
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(10,10,9,.94);
-  border-bottom: 3px solid var(--yellow);
-  backdrop-filter: blur(4px);
+  background: rgba(0,0,0,.78);
+  border-bottom: 1px solid rgba(255,230,0,.35);
+  backdrop-filter: saturate(160%) blur(14px);
+  -webkit-backdrop-filter: saturate(160%) blur(14px);
 }
 .nav{
   display: flex;
@@ -119,7 +121,7 @@ header.site{
   padding: 14px 0;
 }
 .brand{ display: flex; align-items: center; gap: 14px; }
-.brand img{ height: 82px; width: auto; } /* velikost loga v hlavičce — změňte tuto výšku */
+.brand img{ height: 72px; width: auto; } /* velikost loga v hlavičce — změňte tuto výšku */
 .brand__name{ font-size: 1.3rem; font-weight: 700; color: var(--white); line-height: 1.1; }
 .brand__name span{ display:block; font-size: .68rem; color: var(--yellow); font-weight:500; letter-spacing: .12em; }
 
@@ -143,13 +145,15 @@ header.site{
 }
 .nav__list a{
   color: var(--white);
-  font-size: .88rem;
-  font-weight: 600;
-  padding: 10px 14px;
+  font-size: .85rem;
+  font-weight: 500;
+  padding: 9px 14px;
   display: block;
-  border-radius: 4px;
+  border-radius: 999px;
+  transition: color .15s ease, background .15s ease;
 }
-.nav__list a:hover, .nav__list a.active{ color: var(--black); background: var(--yellow); }
+.nav__list a:hover{ color: var(--yellow); background: var(--yellow-soft); }
+.nav__list a.active{ color: var(--black); background: var(--yellow); }
 
 .nav__dropdown{ position: relative; }
 .nav__dropdown-menu{
@@ -158,41 +162,44 @@ header.site{
   top: 100%; left: 0;
   background: var(--card);
   border: 1px solid var(--card-border);
-  border-top: 3px solid var(--yellow);
-  min-width: 190px;
+  min-width: 210px;
   box-shadow: var(--shadow);
-  padding: 6px;
-  border-radius: 0 0 6px 6px;
+  padding: 8px;
+  border-radius: 14px;
 }
 .nav__dropdown:hover .nav__dropdown-menu,
 .nav__dropdown:focus-within .nav__dropdown-menu{ display: block; }
-.nav__dropdown-menu a{ padding: 9px 12px; border-radius: 4px; }
+.nav__dropdown-menu a{ padding: 9px 14px; border-radius: 10px; }
 .nav__dropdown-menu a:hover{ background: var(--yellow); color: var(--black); }
 
 /* ---------- Hero ---------- */
 .hero{
   position: relative;
-  background: linear-gradient(180deg, rgba(5,5,5,.35) 0%, rgba(5,5,5,.85) 78%, var(--bg) 100%),
+  background: radial-gradient(ellipse 45% 55% at 50% 55%, rgba(0,0,0,.78) 0%, rgba(0,0,0,0) 100%),
+              radial-gradient(ellipse at 50% 120%, rgba(255,230,0,.18) 0%, rgba(0,0,0,0) 55%),
+              linear-gradient(180deg, rgba(0,0,0,.25) 0%, rgba(0,0,0,.8) 75%, var(--bg) 100%),
               url('../images/Banner-bez-textu.jpg') center/cover no-repeat;
-  padding: 110px 0 70px;
+  padding: 140px 0 100px;
   text-align: center;
-  border-bottom: 3px solid var(--yellow);
 }
 .hero__eyebrow{
   color: var(--yellow);
   font-family: 'Oswald', sans-serif;
-  letter-spacing: .25em;
-  font-size: .8rem;
-  font-weight: 600;
-  margin-bottom: 10px;
+  letter-spacing: .3em;
+  font-size: .78rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  margin-bottom: 16px;
 }
 .hero h1{
-  margin: 0 0 14px;
+  margin: 0 0 18px;
+  font-size: clamp(2.8rem, 8vw, 5.4rem);
+  line-height: 1;
   color: var(--white);
   text-shadow: 0 4px 18px rgba(0,0,0,.6);
 }
 .hero h1 em{ color: var(--yellow); font-style: normal; }
-.hero p{ max-width: 620px; margin: 0 auto 28px; color: var(--grey); font-size: 1.05rem; }
+.hero p{ max-width: 640px; margin: 0 auto 32px; color: #d0d0d0; font-size: 1.02rem; }
 .hero__actions{ display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
 
 /* ---------- Cards / grid ---------- */
@@ -205,17 +212,17 @@ header.site{
   background: var(--card);
   border: 1px solid var(--card-border);
   border-radius: var(--radius);
-  padding: 24px;
-  box-shadow: var(--shadow);
+  padding: 26px;
 }
 
 /* news */
 .news-card{
   background: var(--card);
   border: 1px solid var(--card-border);
-  border-left: 4px solid var(--red);
   border-radius: var(--radius);
-  padding: 22px 24px;
+  padding: 26px;
+  position: relative;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -238,16 +245,16 @@ header.site{
   font-size: .68rem;
   font-weight: 700;
   padding: 3px 9px;
-  border-radius: 3px;
-  letter-spacing: .06em;
+  border-radius: 999px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
   margin-bottom: 4px;
 }
 
 /* upcoming match */
 .match-card{
-  background: linear-gradient(135deg, var(--card) 0%, var(--bg-alt) 100%);
+  background: var(--card);
   border: 1px solid var(--card-border);
-  border-top: 4px solid var(--yellow);
   border-radius: var(--radius);
   padding: 30px;
   text-align: center;
@@ -264,7 +271,7 @@ header.site{
 .match-card__team{ font-size: 1.3rem; font-weight: 700; color: var(--white); font-family:'Oswald',sans-serif; }
 .match-card__vs{
   color: var(--black);
-  background: var(--red);
+  background: var(--yellow);
   border-radius: 50%;
   width: 42px; height: 42px;
   display: flex; align-items: center; justify-content: center;
@@ -398,8 +405,9 @@ table.tabulka{
 }
 table.tabulka caption{ display:none; }
 table.tabulka th{
-  background: var(--yellow);
-  color: var(--black);
+  background: #141414;
+  color: var(--yellow);
+  border-bottom: 2px solid var(--yellow);
   font-family: 'Oswald', sans-serif;
   text-transform: uppercase;
   font-size: .75rem;
@@ -414,8 +422,8 @@ table.tabulka td{
   color: var(--white);
   white-space: nowrap;
 }
-table.tabulka tbody tr:hover{ background: rgba(247,198,0,.06); }
-table.tabulka tr.tabulka--nas{ background: rgba(247,198,0,.12); }
+table.tabulka tbody tr:hover{ background: rgba(255,230,0,.06); }
+table.tabulka tr.tabulka--nas{ background: rgba(255,230,0,.12); }
 table.tabulka tr.tabulka--nas td:first-child{ border-left: 3px solid var(--yellow); }
 .empty-note{
   padding: 22px;
@@ -447,8 +455,8 @@ table.tabulka tr.tabulka--nas td:first-child{ border-left: 3px solid var(--yello
 
 /* ---------- Team detail page ---------- */
 .team-hero{
-  background: linear-gradient(120deg, var(--bg-alt) 0%, var(--bg) 100%);
-  border-bottom: 3px solid var(--yellow);
+  background: radial-gradient(ellipse at 15% 0%, rgba(255,230,0,.10) 0%, rgba(0,0,0,0) 50%), var(--bg);
+  border-bottom: 1px solid var(--card-border);
   padding: 46px 0 34px;
 }
 .breadcrumb{ font-size: .82rem; color: var(--grey-dark); margin-bottom: 14px; }
@@ -506,9 +514,8 @@ table.tabulka tr.tabulka--nas td:first-child{ border-left: 3px solid var(--yello
 /* ---------- Footer ---------- */
 footer.site{
   background: var(--black);
-  border-top: 3px solid var(--yellow);
-  padding: 46px 0 22px;
-  margin-top: 40px;
+  border-top: 1px solid rgba(255,230,0,.35);
+  padding: 56px 0 26px;
 }
 .footer__grid{
   display: grid;
@@ -522,7 +529,7 @@ footer.site{
 .footer__brand{ display:flex; gap:12px; align-items:center; margin-bottom: 12px;}
 .footer__brand img{ height: 64px; } /* velikost loga v patičce — změňte tuto výšku */
 .footer__bottom{
-  border-top: 1px solid #232120;
+  border-top: 1px solid var(--card-border);
   padding-top: 18px;
   text-align: center;
   color: var(--grey-dark);
@@ -545,7 +552,7 @@ footer.site{
   .nav__list.open{ display: flex; }
   .nav__dropdown-menu{ position: static; border: none; display: none; padding-left: 14px; }
   .nav__dropdown.open .nav__dropdown-menu{ display: block; }
-  .hero{ padding: 90px 0 50px; }
+  .hero{ padding: 90px 0 50px; background-position: center, center, center, 12% center; }
   .footer__grid{ grid-template-columns: 1fr; gap: 22px; }
 }
 
@@ -561,7 +568,7 @@ table.rozpis .rozpis__ceka{ color: var(--grey-dark); }
   text-transform: uppercase; vertical-align: middle;
 }
 .rozpis__stav--win{ background: var(--yellow); color: var(--black); }
-.rozpis__stav--loss{ background: var(--red); color: var(--white); }
+.rozpis__stav--loss{ background: transparent; color: var(--white); box-shadow: inset 0 0 0 1px rgba(255,255,255,.45); }
 .rozpis__stav--draw{ background: var(--grey-dark); color: var(--black); }
 
 /* ---------- Přijďte si zahrát (hlavní stránka) ---------- */
@@ -599,7 +606,7 @@ table.rozpis .rozpis__ceka{ color: var(--grey-dark); }
 .admin__form .admin__check{ flex-direction: row; align-items: center; gap: 10px; }
 .admin__cols{ display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .admin__row{ display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-.admin__msg{ margin: 0; color: #ff6b74; font-size: .9rem; min-height: 1.2em; }
+.admin__msg{ margin: 0; color: var(--danger); font-size: .9rem; min-height: 1.2em; }
 .admin__msg.is-ok{ color: var(--yellow); }
 .admin__bar{
   display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;
@@ -622,9 +629,9 @@ table.rozpis .rozpis__ceka{ color: var(--grey-dark); }
 }
 .admin__item-title{ display: block; color: var(--white); margin: 6px 0 2px; }
 .admin__item-actions{ display: flex; gap: 8px; }
-.tag--pin{ background: var(--red); color: var(--white); }
-.btn--danger{ background: transparent; color: #ff6b74; border-color: #ff6b74; }
-.btn--danger:hover{ background: var(--red); border-color: var(--red); color: var(--white); }
+.tag--pin{ background: var(--white); color: var(--black); }
+.btn--danger{ background: transparent; color: var(--danger); border-color: var(--danger); }
+.btn--danger:hover{ background: var(--danger); border-color: var(--danger); color: var(--black); box-shadow: none; }
 .btn:disabled{ opacity: .5; cursor: wait; }
 .admin__photos{ display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
 .admin__photo{
@@ -701,12 +708,12 @@ button.album-nav__rok{ background: none; cursor: pointer; font-size: .8rem; }
   padding: 10px 12px; font: inherit; width: 100%; max-width: 360px; margin-bottom: 14px;
 }
 .str-plus{ color: var(--yellow) !important; }
-.str-minus{ color: #ff6b74 !important; }
+.str-minus{ color: var(--grey) !important; }
 table.tabulka td.wrap{ white-space: normal; min-width: 240px; }
 table.tabulka td a{ color: var(--white); }
 table.tabulka td a:hover{ color: var(--yellow); }
 .hrac-zapasy td{ vertical-align: top; }
-.soupiska__hrac{ color: var(--yellow); font-weight: 600; border-bottom: 1px dashed rgba(247,198,0,.4); }
+.soupiska__hrac{ color: var(--yellow); font-weight: 600; border-bottom: 1px dashed rgba(255,230,0,.4); }
 .soupiska__hrac:hover{ color: var(--white); border-color: var(--white); }
 @media (max-width: 600px){
   .hrac-graf__plocha{ height: 280px; }
@@ -744,7 +751,7 @@ table.zapas-hry .zapas-sady{ text-align: center; font-weight: 700; }
 table.zapas-hry .zapas-stav{ text-align: center; color: var(--yellow); font-family: 'Oswald', sans-serif; }
 table.zapas-hry tr.zapas-ctyrhra{ background: rgba(255,255,255,.03); }
 table.zapas-hry tr.zapas-neodehrano td{ opacity: .45; }
-table.zapas-hry tr.is-hl{ background: rgba(247,198,0,.14) !important; }
+table.zapas-hry tr.is-hl{ background: rgba(255,230,0,.14) !important; }
 .zapas-hrac{ border-radius: 3px; }
 table.tabulka.zapas-stat{ min-width: 0; }
 .zapas-hrac.is-hl{ background: var(--yellow); color: var(--black) !important; padding: 0 3px; }
@@ -755,4 +762,75 @@ table.tabulka.zapas-stat{ min-width: 0; }
   .zapas-skore__tym:first-child, .zapas-skore__tym:last-child{ text-align: center; }
   .zapas-skore__tym{ font-size: 1.25rem; }
   .zapas-skore__cislo{ font-size: 2.8rem; }
+}
+
+
+/* ==========================================================================
+   Moderní vzhled — sjednocené karty, jemné přechody, černo-žlutý akcent
+   ========================================================================== */
+::selection{ background: var(--yellow); color: var(--black); }
+
+.section--alt{ background: var(--bg-alt); border-top: 1px solid #141414; border-bottom: 1px solid #141414; }
+
+/* všechny karty: tmavá plocha, jemný rámeček, při najetí žlutý obrys a lehké nadzvednutí */
+.card, .news-card, .match-card, .result-card, .team-card, .stat-card, .album-card, .admin__item, .admin__photo{
+  background: linear-gradient(180deg, #141414 0%, #0c0c0c 100%);
+  border: 1px solid var(--card-border);
+  transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+.news-card:hover, .match-card:hover, .result-card:hover, .team-card:hover, .album-card:hover{
+  transform: translateY(-4px);
+  border-color: rgba(255,230,0,.55);
+  box-shadow: 0 16px 40px rgba(0,0,0,.7), 0 0 0 1px rgba(255,230,0,.15);
+}
+
+/* aktuality: žlutá linka nahoře místo červeného pruhu */
+.news-card::before{
+  content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--yellow) 0%, rgba(255,230,0,0) 85%);
+}
+.news-card h3{ font-size: 1.15rem; line-height: 1.25; }
+
+/* nejbližší zápasy: žlutá linka nahoře */
+.match-card{ position: relative; overflow: hidden; }
+.match-card::before{
+  content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--yellow);
+}
+
+/* týmy */
+.team-card__badge{
+  background: linear-gradient(135deg, #fff35c 0%, var(--yellow) 45%, #e6cf00 100%);
+  font-size: 2.6rem; padding: 26px 0;
+}
+.team-card__link{ color: var(--yellow); }
+
+/* tabulky */
+.table-wrap{ border-radius: 14px; border-color: var(--card-border); background: var(--card); }
+table.tabulka{ background: transparent; }
+table.tabulka td{ border-bottom-color: #1c1c1c; }
+table.tabulka tbody tr:last-child td{ border-bottom: none; }
+table.tabulka tbody tr:hover{ background: rgba(255,230,0,.05); }
+table.tabulka tr.tabulka--nas{ background: rgba(255,230,0,.10); }
+table.tabulka tr.tabulka--nas td{ color: var(--yellow); font-weight: 600; }
+
+/* štítky, pilulky */
+.pill{ border-radius: 999px; background: #111; }
+.rozpis__stav{ border-radius: 999px; padding: 2px 9px; }
+.rozpis__stav--draw{ background: transparent; color: var(--grey); box-shadow: inset 0 0 0 1px rgba(255,255,255,.2); }
+
+/* výsledky: vítězné skóre žluté, poražené tlumené */
+.result-card__score{ font-size: 2.5rem; }
+
+/* patička */
+.footer__grid h4{ letter-spacing: .12em; font-size: .82rem; }
+.footer__brand strong{ font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: .03em; font-size: 1.1rem; }
+
+/* formuláře v administraci a hledání: žlutý fokus */
+.admin__form input:focus, .admin__form textarea:focus, .admin__select:focus, .hrac-hledat:focus{
+  outline: none; border-color: var(--yellow); box-shadow: 0 0 0 3px rgba(255,230,0,.18);
+}
+
+/* plynulý posun stránky bez zbytečných animací pro lidi, kteří si je vypnuli */
+@media (prefers-reduced-motion: reduce){
+  *{ transition: none !important; scroll-behavior: auto !important; }
 }

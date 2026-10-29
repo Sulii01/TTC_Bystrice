@@ -47,15 +47,15 @@ TTC_Bystrice/
 Všechno vizuální je v jednom souboru: **`css/style.css`**.
 
 ### Barvy
-Na začátku souboru (`:root { ... }`) jsou definované barvy jako proměnné — žluto-černé
-schéma podle loga a banneru, s červenou jako doplňkovou barvou:
+Na začátku souboru (`:root { ... }`) jsou definované barvy jako proměnné — sytá žlutá
+a čistá černá podle klubového banneru:
 
 ```css
---bg:            #0c0c0b;   /* tmavé pozadí stránky */
---card:          #1b1a17;   /* pozadí karet/boxů */
---yellow:        #f7c600;   /* hlavní žlutá */
---red:           #d9202f;   /* doplňková červená */
---white:         #f5f4ef;   /* text */
+--bg:            #000000;   /* černé pozadí stránky */
+--card:          #111111;   /* pozadí karet/boxů */
+--yellow:        #ffe600;   /* hlavní sytá žlutá z banneru */
+--white:         #ffffff;   /* text */
+--danger:        #ff5c5c;   /* jen chybové hlášky a mazání v administraci */
 ```
 Změnou těchto hodnot se barva projeví na celém webu najednou.
 

@@ -215,8 +215,8 @@
       return;
     }
     var css = getComputedStyle(document.documentElement);
-    var zluta = css.getPropertyValue('--yellow').trim() || '#f7c600';
-    var cervena = css.getPropertyValue('--red').trim() || '#d9202f';
+    var zluta = css.getPropertyValue('--yellow').trim() || '#ffe600';
+    var bila = css.getPropertyValue('--white').trim() || '#ffffff';
     var seda = css.getPropertyValue('--grey-dark').trim() || '#8a867c';
     var body = graf.body, offset = 0;
     var chart = new Chart(document.getElementById('graf-str'), {
@@ -224,9 +224,9 @@
       data: {
         labels: body.map(function (b) { return b[0]; }),
         datasets: [
-          { label: 'STR', data: body.map(function (b) { return b[1]; }), borderColor: zluta, backgroundColor: 'rgba(247,198,0,.12)',
+          { label: 'STR', data: body.map(function (b) { return b[1]; }), borderColor: zluta, backgroundColor: 'rgba(255,230,0,.12)',
             fill: true, borderWidth: 1.5, pointRadius: 0, pointHoverRadius: 4, tension: .15 },
-          { label: 'STR (stabilní)', data: body.map(function (b) { return b[2]; }), borderColor: cervena,
+          { label: 'STR (stabilní)', data: body.map(function (b) { return b[2]; }), borderColor: bila,
             borderWidth: 2, pointRadius: 0, pointHoverRadius: 0, tension: .3 }
         ]
       },
