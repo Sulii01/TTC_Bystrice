@@ -173,7 +173,7 @@ header.site{
 .hero{
   position: relative;
   background: linear-gradient(180deg, rgba(5,5,5,.35) 0%, rgba(5,5,5,.85) 78%, var(--bg) 100%),
-              url('../images/Banner.jpg') center/cover no-repeat;
+              url('../images/Banner-bez-textu.jpg') center/cover no-repeat;
   padding: 110px 0 70px;
   text-align: center;
   border-bottom: 3px solid var(--yellow);
@@ -274,13 +274,14 @@ header.site{
 .match-card__empty{ color: var(--grey); font-size: 1rem; padding: 10px 0 20px; }
 
 /* compact per-team match card (homepage "Nejbližší zápasy" grid) */
-.match-card--sm{ padding: 20px; }
+.match-card--sm{ padding: 20px; display: flex; flex-direction: column; align-items: center; }
 .match-card--sm .match-card__label{ color: var(--yellow); font-family:'Oswald',sans-serif; font-size:.8rem; font-weight:700; letter-spacing:.08em; margin-bottom: 14px; }
-.match-card--sm .match-card__teams{ gap: 10px; margin-bottom: 12px; }
-.match-card--sm .match-card__team{ font-size: 1rem; }
+.match-card--sm .match-card__teams{ flex-direction: column; flex-wrap: nowrap; gap: 8px; margin-bottom: 14px; }
+.match-card--sm .match-card__team{ font-size: 1.05rem; text-transform: uppercase; letter-spacing: .02em; line-height: 1.25; }
 .match-card--sm .match-card__vs{ width: 32px; height: 32px; font-size: .68rem; }
 .match-card--sm .match-card__empty{ font-size: .9rem; padding: 6px 0 14px; }
-.match-card__link{ display: flex; margin-top: 16px; }
+.match-card--sm .match-card__meta{ margin-bottom: 14px; }
+.match-card__link{ margin-top: auto; }
 
 /* team cards */
 .team-card{
@@ -429,15 +430,19 @@ table.tabulka tr.tabulka--nas td:first-child{ border-left: 3px solid var(--yello
 /* ---------- Tabulky soutěží na hlavní stránce ---------- */
 /* Širší kontejner a pevně 2 sloupce (2 karty vedle sebe, další 2 pod nimi),
    tabulka uvnitř se zmenší/zalomí místo horizontálního scrollování. */
-#tabulky .container{ max-width: 1400px; }
-#tabulky .grid{ grid-template-columns: repeat(2, 1fr); }
+#tabulky .grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
 #tabulky .table-wrap{ overflow-x: visible; }
 #tabulky table.tabulka{ min-width: 0; width: 100%; font-size: .84rem; }
 #tabulky table.tabulka th, #tabulky table.tabulka td{ padding: 8px 6px; white-space: normal; }
 #tabulky table.tabulka th:first-child, #tabulky table.tabulka td:first-child{ padding-left: 10px; }
 
 @media (max-width: 760px){
-  #tabulky .grid{ grid-template-columns: 1fr; }
+  #tabulky .grid{ grid-template-columns: minmax(0, 1fr); }
+  #tabulky .card{ padding-left: 12px; padding-right: 12px; }
+  #tabulky .table-wrap{ overflow-x: auto; }
+  #tabulky table.tabulka{ font-size: .74rem; }
+  #tabulky table.tabulka th, #tabulky table.tabulka td{ padding: 7px 4px; }
+  #tabulky table.tabulka th{ font-size: .62rem; letter-spacing: 0; }
 }
 
 /* ---------- Team detail page ---------- */
@@ -542,3 +547,28 @@ footer.site{
   .nav__dropdown.open .nav__dropdown-menu{ display: block; }
   .hero{ padding: 90px 0 50px; }
 }
+
+/* ---------- Rozpis utkání na stránkách týmů ---------- */
+table.rozpis .rozpis__nas{ color: var(--yellow); font-weight: 700; }
+table.rozpis .rozpis__skore{ font-weight: 700; }
+table.rozpis .rozpis__skore a{ color: var(--white); border-bottom: 1px dashed var(--grey-dark); }
+table.rozpis .rozpis__skore a:hover{ color: var(--yellow); border-color: var(--yellow); }
+table.rozpis .rozpis__ceka{ color: var(--grey-dark); }
+.rozpis__stav{
+  display: inline-block; margin-left: 6px; padding: 2px 7px; border-radius: 4px;
+  font-family: 'Oswald', sans-serif; font-size: .68rem; font-weight: 700; letter-spacing: .05em;
+  text-transform: uppercase; vertical-align: middle;
+}
+.rozpis__stav--win{ background: var(--yellow); color: var(--black); }
+.rozpis__stav--loss{ background: var(--red); color: var(--white); }
+.rozpis__stav--draw{ background: var(--grey-dark); color: var(--black); }
+
+/* ---------- Přijďte si zahrát (hlavní stránka) ---------- */
+.info-card h3{ margin: 0 0 14px; color: var(--yellow); }
+.info-card p{ color: var(--grey); margin: 0 0 12px; }
+.info-list{ list-style: none; margin: 0 0 16px; padding: 0; }
+.info-list li{ display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid var(--card-border); }
+.info-list li span{ color: var(--grey-dark); }
+.info-list li strong{ color: var(--white); text-align: right; }
+.info-card__who strong{ color: var(--white); }
+.info-card__actions{ display: flex; gap: 12px; flex-wrap: wrap; margin-top: 18px; }
