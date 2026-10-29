@@ -30,8 +30,10 @@
     }).join('');
   }
 
-  function fotoUrl(cesta) {
-    return cfg.url + '/storage/v1/object/public/' + cfg.bucket + '/' + encodeURIComponent(cesta);
+  function fotoUrl(cesta, bucket) {
+    // cesta může obsahovat lomítka (2026/…), ta zůstávají
+    return cfg.url + '/storage/v1/object/public/' + (bucket || cfg.bucket) + '/' +
+      String(cesta).split('/').map(encodeURIComponent).join('/');
   }
 
   function chyba(el, co) {
@@ -41,14 +43,16 @@
 
   function nactiAktuality(el) {
     var limit = parseInt(el.getAttribute('data-limit') || '6', 10);
-    api('aktuality?select=nadpis,text,stitek,datum_text&order=pripnuto.desc,vytvoreno.desc&limit=' + limit)
+    api('aktuality?select=nadpis,text,stitek,datum_text,foto&order=pripnuto.desc,vytvoreno.desc&limit=' + limit)
       .then(function (rows) {
         if (!rows.length) {
           el.innerHTML = '<div class="gallery-empty"><strong>Zatím žádné aktuality</strong>Brzy se tu objeví novinky z klubu.</div>';
           return;
         }
         el.innerHTML = rows.map(function (a) {
-          return '<article class="news-card">' +
+          var foto = a.foto ? '<figure class="news-card__foto gallery-item"><img src="' +
+            fotoUrl(a.foto, cfg.bucketAktuality) + '" alt="' + esc(a.nadpis) + '" loading="lazy"></figure>' : '';
+          return '<article class="news-card' + (a.foto ? ' news-card--foto' : '') + '">' + foto +
             '<span class="tag">' + esc(a.stitek) + '</span>' +
             (a.datum_text ? '<div class="news-card__date">' + esc(a.datum_text) + '</div>' : '') +
             '<h3>' + esc(a.nadpis) + '</h3>' + textNaHtml(a.text) +

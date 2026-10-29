@@ -49,6 +49,7 @@ create table if not exists public.aktuality (
   stitek     text not null default 'Klub',
   datum_text text,                                   -- zobrazené datum, např. "29. 10. 2026" nebo "Celoročně"
   pripnuto   boolean not null default false,         -- připnuté aktuality jsou vždy první
+  foto       text,                                   -- fotka v úložišti "aktuality" (viz migrace-02)
   vytvoreno  timestamptz not null default now(),
   autor      uuid default auth.uid() references auth.users (id) on delete set null
 );
