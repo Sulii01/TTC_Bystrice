@@ -668,3 +668,49 @@ table.rozpis .rozpis__ceka{ color: var(--grey-dark); }
 .admin__filtr{ display: flex; flex-direction: column; gap: 6px; font-size: .85rem; color: var(--grey); min-width: 200px; }
 .admin__album{ font-size: 1.05rem; color: var(--yellow); margin: 18px 0 10px; }
 .gallery-item{ margin: 0; }
+
+/* ---------- Detail hráče (hrac.html) ---------- */
+.hrac-str{ flex-direction: column; width: auto; min-width: 96px; padding: 0 14px; font-size: 2rem; line-height: 1; }
+.hrac-str__lbl{ display: block; font-size: .7rem; letter-spacing: .15em; margin-bottom: 4px; }
+.pill--link{ color: var(--white); }
+.pill--link:hover{ border-color: var(--yellow); color: var(--yellow); }
+.hrac-karty{ display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; margin-bottom: 18px; }
+.stat-card{
+  background: var(--card); border: 1px solid var(--card-border); border-radius: var(--radius);
+  padding: 16px 18px; display: flex; flex-direction: column; gap: 4px;
+}
+.stat-card span{ color: var(--grey-dark); font-size: .8rem; text-transform: uppercase; letter-spacing: .05em; }
+.stat-card strong{ font-family: 'Oswald', sans-serif; font-size: 1.7rem; color: var(--white); line-height: 1.1; }
+.stat-card small{ color: var(--grey-dark); font-size: .8rem; }
+.stat-card--hl{ border-color: var(--yellow); }
+.stat-card--hl strong{ color: var(--yellow); }
+.hrac-druzstva h3{ margin: 0 0 6px; font-size: 1.05rem; color: var(--yellow); }
+.hrac-druzstva .info-list{ margin: 0; }
+.hrac-druzstva small, table.tabulka small{ color: var(--grey-dark); font-size: .8em; }
+.hrac-graf__sezony{ margin-bottom: 14px; }
+.hrac-graf__plocha{ position: relative; height: 380px; }
+button.album-nav__rok{ background: none; cursor: pointer; font-size: .8rem; }
+.album-nav__rok.is-active{ color: var(--black); background: var(--yellow); border-color: var(--yellow); }
+.hrac-tabs{ margin-bottom: 16px; }
+.hrac-roky{ margin-bottom: 14px; }
+.hrac-souhrn{ color: var(--grey); margin: 0 0 10px; }
+.hrac-souhrn strong{ color: var(--white); }
+.hrac-hledat{
+  background: var(--bg); color: var(--white); border: 1px solid var(--card-border); border-radius: 6px;
+  padding: 10px 12px; font: inherit; width: 100%; max-width: 360px; margin-bottom: 14px;
+}
+.str-plus{ color: var(--yellow) !important; }
+.str-minus{ color: #ff6b74 !important; }
+table.tabulka td.wrap{ white-space: normal; min-width: 240px; }
+table.tabulka td a{ color: var(--white); }
+table.tabulka td a:hover{ color: var(--yellow); }
+.hrac-zapasy td{ vertical-align: top; }
+.soupiska__hrac{ color: var(--yellow); font-weight: 600; border-bottom: 1px dashed rgba(247,198,0,.4); }
+.soupiska__hrac:hover{ color: var(--white); border-color: var(--white); }
+@media (max-width: 600px){
+  .hrac-graf__plocha{ height: 280px; }
+  .hrac-str{ font-size: 1.5rem; min-width: 76px; }
+  .hrac-karty{ grid-template-columns: 1fr 1fr; gap: 10px; }
+  .stat-card{ padding: 12px 14px; }
+  .stat-card strong{ font-size: 1.35rem; }
+}

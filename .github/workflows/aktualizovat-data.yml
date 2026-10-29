@@ -34,7 +34,8 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          if git diff --quiet; then
+          # --porcelain zachytí i nové soubory (např. data nového hráče v data/hraci/)
+          if [ -z "$(git status --porcelain)" ]; then
             echo "Žádné změny — STIS zatím nemá nová data."
           else
             git add -A
