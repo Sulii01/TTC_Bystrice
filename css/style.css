@@ -745,7 +745,8 @@ table.zapas-hry .zapas-stav{ text-align: center; color: var(--yellow); font-fami
 table.zapas-hry tr.zapas-ctyrhra{ background: rgba(255,255,255,.03); }
 table.zapas-hry tr.zapas-neodehrano td{ opacity: .45; }
 table.zapas-hry tr.is-hl{ background: rgba(247,198,0,.14) !important; }
-.zapas-hrac{ cursor: pointer; border-radius: 3px; }
+.zapas-hrac{ border-radius: 3px; }
+table.tabulka.zapas-stat{ min-width: 0; }
 .zapas-hrac.is-hl{ background: var(--yellow); color: var(--black) !important; padding: 0 3px; }
 .zapas-hrac.is-hl a{ color: var(--black) !important; }
 .zapas-stat__tym{ margin: 0 0 10px; color: var(--yellow); font-size: 1.1rem; }
