@@ -196,9 +196,8 @@ stránku vašeho družstva (např. `.../soutez-6722/druzstvo-66623`).
 
 ## 7. Co je v tuto chvíli jen "placeholder" (čeká na doplnění)
 
-- **Aktuality** na hlavní stránce — 3 obecné texty, klidně je přepište za reálné novinky
-  (každá aktualita je jeden blok `<article class="news-card">` v `index.html`)
-- **Fotogalerie** — zatím prázdná, čeká na první fotky (viz bod 4 výše)
+- **Aktuality a fotogalerie** se už needitují v HTML — přidávají se přes administraci webu
+  (viz bod 9 níže)
 - **Tabulky, rozpisy, soupisky** — doplní se automaticky spuštěním
   `aktualizovat_data.py`, jakmile STIS zveřejní data pro sezónu 2026/2027
 
@@ -220,6 +219,61 @@ rozšiřovat (např. STIS změní strukturu stránek):
    volané dvakrát.
 4. **Rozpis/výsledky** jsou naopak normální HTML tabulka, jen buňka s výsledkem
    obsahuje schovaný atribut s detailem zápasu, který je potřeba parsovat opatrně.
+
+---
+
+## 9. Administrace aktualit a fotogalerie (Supabase)
+
+Aktuality a fotky se přidávají přímo na webu na stránce **`admin.html`**
+(odkaz „Administrace“ je dole v patičce každé stránky). Data se ukládají do
+bezplatné služby **Supabase** (projekt `ttc-bystrice`, přihlašuje se do ní jen
+správce webu na supabase.com).
+
+### Role
+| Role | Co smí |
+|---|---|
+| `admin` | vše — přidávat, upravovat a mazat i cizí aktuality a fotky |
+| `editor` | přidávat; upravovat a mazat jen svoje aktuality a fotky |
+
+Oprávnění hlídá přímo databáze (soubor `supabase/schema.sql`), ne jen web.
+
+### Přidání nového uživatele
+1. Supabase → **Authentication → Users → Add user → Create new user**.
+2. Vyplňte e-mail a heslo, zaškrtněte **Auto Confirm User** a klikněte na *Create user*.
+3. Supabase → **SQL Editor → New query**, vložte (upravte e-mail, roli a jméno) a dejte *Run*:
+   ```sql
+   insert into public.role_uzivatelu (user_id, role, jmeno)
+   select id, 'editor', 'Jan Novák' from auth.users where email = 'jan.novak@email.cz'
+   on conflict (user_id) do update set role = excluded.role, jmeno = excluded.jmeno;
+   ```
+   (`'editor'` nahraďte `'admin'`, pokud má mít plná práva.)
+4. Pošlete mu adresu `https://sulii01.github.io/TTC_Bystrice/admin.html`, e-mail a heslo.
+   Po přihlášení si heslo může sám změnit tlačítkem **Změnit heslo**.
+
+### Odebrání přístupu / změna hesla
+- Odebrat přístup: Supabase → Authentication → Users → u uživatele **⋮ → Delete user**
+  (jeho role se smaže automaticky; jeho aktuality a fotky na webu zůstanou).
+- Jen zakázat úpravy, ale účet nechat: v SQL Editoru
+  `delete from public.role_uzivatelu where user_id = (select id from auth.users where email = 'jan.novak@email.cz');`
+- Zapomenuté heslo: Authentication → Users → u uživatele **⋮ → Edit / Reset password**
+  (nebo uživatele smažte a vytvořte znovu s novým heslem).
+- Kdo má jakou roli:
+  `select u.email, r.role, r.jmeno from public.role_uzivatelu r join auth.users u on u.id = r.user_id;`
+
+### Důležité nastavení (udělat jednou)
+- Authentication → **Sign In / Providers** → vypnout **Allow new users to sign up**
+  (jinak by si účet mohl založit kdokoliv; bez role by sice nic nesměl, ale nechceme to).
+- Tajný klíč (`sb_secret_…`) a heslo k databázi **nikdy nikomu neposílejte a nedávejte do webu**.
+  Do webu patří jen veřejný klíč `sb_publishable_…` (soubor `js/supabase-config.js`).
+
+### Jak to funguje technicky
+- `js/supabase-config.js` — adresa projektu a veřejný klíč.
+- `js/obsah.js` — na hlavní stránce a v galerii načte aktuality a fotky z databáze.
+- `admin.html` + `js/admin.js` — přihlášení a formuláře administrace.
+- Fotky se před nahráním v prohlížeči zmenší na max. 1600 px (JPEG) a ukládají se
+  do úložiště Supabase (Storage → bucket `galerie`).
+- `.github/workflows/supabase-probuzeni.yml` — každé 3 dny se připojí k databázi,
+  aby se bezplatný projekt neuspal (uspí se po 7 dnech bez aktivity).
 
 ---
 

@@ -23,14 +23,15 @@ document.addEventListener('DOMContentLoaded', function () {
   var lightbox = document.getElementById('lightbox');
   if (lightbox) {
     var lightboxImg = lightbox.querySelector('img');
-    document.querySelectorAll('.gallery-item').forEach(function (item) {
-      item.addEventListener('click', function () {
-        var fullImg = item.querySelector('img');
-        if (!fullImg) return;
-        lightboxImg.src = fullImg.getAttribute('src');
-        lightboxImg.alt = fullImg.getAttribute('alt') || '';
-        lightbox.classList.add('open');
-      });
+    // delegace: funguje i pro fotky, které se do stránky načtou až později (z databáze)
+    document.addEventListener('click', function (e) {
+      var item = e.target.closest && e.target.closest('.gallery-item');
+      if (!item) return;
+      var fullImg = item.querySelector('img');
+      if (!fullImg) return;
+      lightboxImg.src = fullImg.getAttribute('src');
+      lightboxImg.alt = fullImg.getAttribute('alt') || '';
+      lightbox.classList.add('open');
     });
     lightbox.addEventListener('click', function () {
       lightbox.classList.remove('open');

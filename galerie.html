@@ -6,7 +6,7 @@
 <title>Fotogalerie — TTC Bystřice</title>
 <meta name="description" content="Fotogalerie TTC Bystřice — fotky z tréninků a zápasů.">
 <link rel="icon" type="image/png" href="images/Logo.png">
-<link rel="stylesheet" href="css/style.css?v=2">
+<link rel="stylesheet" href="css/style.css?v=3">
 </head>
 <body>
 
@@ -50,26 +50,8 @@
 <section class="section">
   <div class="container">
 
-    <!--
-      JAK PŘIDAT NOVÉ FOTKY (pro správce webu):
-      1. Nahraj obrázek do složky images/galerie/ (např. images/galerie/2026-09-zapas-a.jpg).
-      2. Zkopíruj jeden blok <figure class="gallery-item">...</figure> níže a uprav mu
-         cestu k obrázku (src), popisek (alt) a text v <figcaption>.
-      3. Smaž nebo nech beze změny <div class="gallery-empty">, pokud už nějaké fotky přidáváš poprvé.
-
-      Ukázkový blok:
-      <figure class="gallery-item">
-        <img src="images/galerie/nazev-souboru.jpg" alt="Popis fotky">
-        <figcaption>Trénink — srpen 2026</figcaption>
-      </figure>
-    -->
-
-    <div class="gallery-grid">
-      <div class="gallery-empty">
-        <strong>Galerie zatím čeká na první fotky</strong>
-        Jakmile proběhne trénink nebo zápas, přidejte sem fotky podle návodu v HTML kódu této stránky
-        (složka <code>images/galerie/</code>) — tady se pak zobrazí jako klikací náhledy.
-      </div>
+    <div class="gallery-grid" data-obsah="galerie">
+      <div class="gallery-empty"><strong>Načítám fotky…</strong></div>
     </div>
   </div>
 </section>
@@ -112,11 +94,13 @@
       </div>
     </div>
     <div class="footer__bottom">
-      © 2026 TTC Bystřice — data o soutěžích: <a href="https://stis.ping-pong.cz/" target="_blank" rel="noopener">STIS ČAST</a>
+      © 2026 TTC Bystřice — data o soutěžích: <a href="https://stis.ping-pong.cz/" target="_blank" rel="noopener">STIS ČAST</a> · <a href="admin.html" class="footer__admin">Administrace</a>
     </div>
   </div>
 </footer>
 
 <script src="js/main.js"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/obsah.js"></script>
 </body>
 </html>
