@@ -36,9 +36,12 @@ import re
 import json
 import os
 import sys
+import time
 from urllib.request import Request, build_opener, HTTPCookieProcessor
 from http.cookiejar import CookieJar
 from html import unescape as html_unescape
+
+import stis_hraci
 
 BASE = "https://stis.ping-pong.cz"
 SVAZ = "420802"
@@ -253,12 +256,15 @@ def parse_soupiska(html, id_druzstvo):
             texts = [t for t in texts if t != ""]
             if len(texts) < 4:
                 continue
+            odkaz = re.search(r'<a href="(/hrac-(\d+)/[^"]*)"', row_html)
             poradi, jmeno, rocnik_nar, umisteni = texts[0], texts[1], texts[2], texts[3]
             str_rating = texts[4] if len(texts) > 4 else ""
             players.append({
                 "poradi": poradi.rstrip("."),
                 "jmeno": jmeno,
                 "zebricek": f"{umisteni} (STR {str_rating})" if str_rating else umisteni,
+                "id": odkaz.group(2) if odkaz else None,
+                "stis_cesta": odkaz.group(1) if odkaz else None,
             })
         return players
     return None
@@ -326,6 +332,13 @@ def render_rozpis(matches):
     return "\n    ".join(body)
 
 
+def _odkaz_hrace(p):
+    # jméno hráče vede na jeho detail (hrac.html), pokud o něm máme data ze STIS
+    if p.get("id"):
+        return f'<a href="hrac.html?id={p["id"]}" class="soupiska__hrac">{p["jmeno"]}</a>'
+    return p["jmeno"]
+
+
 def render_soupiska(players):
     if not players:
         return (
@@ -337,7 +350,7 @@ def render_soupiska(players):
             "Soupiska zatím nebyla schválena</td></tr></tbody></table></div>"
         )
     rows = "".join(
-        f'<tr><td>{p["poradi"]}</td><td>{p["jmeno"]}</td><td>{p["zebricek"]}</td></tr>'
+        f'<tr><td>{p["poradi"]}</td><td>{_odkaz_hrace(p)}</td><td>{p["zebricek"]}</td></tr>'
         for p in players
     )
     return (
@@ -423,6 +436,37 @@ def save(path, content):
 # Hlavní běh
 # ---------------------------------------------------------------------------
 
+def aktualizuj_hrace(opener, hraci):
+    """Stáhne ze STIS stránku každého hráče z našich soupisek a uloží ji jako JSON
+    do data/hraci/ID.json. Při chybě u jednoho hráče se ponechá jeho starý soubor."""
+    if not hraci:
+        return
+    out_dir = os.path.join(ROOT, "data", "hraci")
+    os.makedirs(out_dir, exist_ok=True)
+    print(f"\nHráči: {len(hraci)} (detaily ze STIS)")
+    zmeneno = 0
+    for pid, info in sorted(hraci.items()):
+        try:
+            data = stis_hraci.parse_hrac(fetch(opener, info["stis_cesta"]))
+        except Exception as e:   # síť / STIS nedostupný — nechat stará data
+            print(f"  [!] hráč {pid}: {e}")
+            continue
+        if not data or not data.get("jmeno"):
+            print(f"  [!] hráč {pid}: stránku se nepodařilo přečíst, ponechávám beze změny")
+            continue
+        data["id"] = pid
+        data["tymy"] = info["tymy"]
+        data["stis_url"] = BASE + info["stis_cesta"]
+        text = json.dumps(data, ensure_ascii=False, separators=(",", ":"))
+        path = os.path.join(out_dir, f"{pid}.json")
+        old = load(path) if os.path.exists(path) else None
+        if old != text:
+            save(path, text)
+            zmeneno += 1
+        time.sleep(0.3)   # šetrně k serveru STIS
+    print(f"  -> aktualizováno hráčů: {zmeneno}")
+
+
 def main():
     opener = make_opener()
     print("Připojuji se na STIS...")
@@ -430,6 +474,7 @@ def main():
     all_last_matches = {}
     upcoming_by_letter = {}
     all_tables = {}
+    hraci = {}        # ID hráče -> {"stis_cesta": ..., "tymy": ["A", ...]} ze všech našich soupisek
     teams_with_los_data = set()
 
     for team in TEAMS:
@@ -475,6 +520,10 @@ def main():
         soup_html = fetch(opener, f"/soupisky/svaz-{SVAZ}/rocnik-{ROCNIK}/soutez-{soutez}")
         players = parse_soupiska(soup_html, druzstvo)
         if players:
+            for pl in players:
+                if pl.get("id"):
+                    h = hraci.setdefault(pl["id"], {"stis_cesta": pl["stis_cesta"], "tymy": []})
+                    h["tymy"].append(letter)
             html, ok = replace_marker(html, "SOUPISKA", render_soupiska(players))
             changed = changed or ok
             print(f"  soupiska: {len(players)} hráčů (aktualizováno)")
@@ -484,6 +533,9 @@ def main():
         if changed:
             save(path, html)
             print(f"  -> uloženo do {fname}")
+
+    # detaily hráčů (stránka hrac.html čte data/hraci/ID.json)
+    aktualizuj_hrace(opener, hraci)
 
     # index.html — výsledky posledních zápasů, nejbližší zápasy, tabulky soutěží
     index_path = os.path.join(ROOT, "index.html")

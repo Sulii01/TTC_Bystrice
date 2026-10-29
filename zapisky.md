@@ -281,5 +281,20 @@ Oprávnění hlídá přímo databáze (soubor `supabase/schema.sql`), ne jen we
 
 ---
 
+## 10. Detail hráče (hrac.html)
+
+Jména na soupiskách týmů jsou odkazy na **`hrac.html?id=ID`** (ID hráče na STIS).
+Stránka ukazuje vše ze stránky hráče na STIS: aktuální sezónu (bilance, STR,
+družstva), graf vývoje STR s výběrem sezóny, nejcennější výhry, bilanci dvouher
+po sezónách, historii sezón, všechny zápasy po sezónách a statistiku soupeřů.
+
+- Data stahuje `aktualizovat_data.py` (spolu s tabulkami a výsledky) pro každého
+  hráče ze soupisek A–D a ukládá je do `data/hraci/ID.json`. Parsování stránky
+  hráče je v souboru `stis_hraci.py`.
+- Když STIS stránku hráče zrovna nevrátí, zůstanou jeho předchozí data.
+- Graf kreslí knihovna Chart.js (načítá se z cdn.jsdelivr.net).
+
+---
+
 *Tento soubor si klidně upravujte a doplňujte — je jen pro vaši (a moji budoucí)
 orientaci ve webu, žádná část webu se podle něj automaticky negeneruje.*
