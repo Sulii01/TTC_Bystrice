@@ -512,7 +512,7 @@ footer.site{
 }
 .footer__grid{
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: 1.3fr 1fr 1fr;   /* logo + popis, kontakt, odkazy — přes celou šířku */
   gap: 30px;
   margin-bottom: 28px;
 }
@@ -546,6 +546,7 @@ footer.site{
   .nav__dropdown-menu{ position: static; border: none; display: none; padding-left: 14px; }
   .nav__dropdown.open .nav__dropdown-menu{ display: block; }
   .hero{ padding: 90px 0 50px; }
+  .footer__grid{ grid-template-columns: 1fr; gap: 22px; }
 }
 
 /* ---------- Rozpis utkání na stránkách týmů ---------- */
