@@ -732,7 +732,6 @@ table.tabulka td a:hover{ color: var(--yellow); }
 .zapas-skore__cislo .is-loser{ color: var(--grey-dark); }
 .zapas-vitez{ font-size: 1.15rem !important; }
 .zapas-info li strong{ font-weight: 600; }
-.zapas-napoveda{ margin: -6px 0 14px; }
 table.zapas-hry td{ vertical-align: middle; }
 table.zapas-hry td.zapas-strana{ white-space: nowrap; color: var(--grey); }
 table.zapas-hry td.zapas-strana.is-winner{ color: var(--white); font-weight: 700; }
