@@ -2,7 +2,6 @@
 // Data připravuje skript aktualizovat_data.py ze stránky hráče na STIS do data/hraci/ID.json.
 (function () {
   var TYMY = { A: 'tym-a.html', B: 'tym-b.html', C: 'tym-c.html', D: 'tym-d.html' };
-  var STIS = 'https://stis.ping-pong.cz';
   var $ = function (id) { return document.getElementById(id); };
   var id = (new URLSearchParams(location.search).get('id') || '').replace(/\D/g, '');
 
@@ -34,7 +33,12 @@
     return;
   }
 
-  fetch('data/hraci/' + id + '.json', { cache: 'no-cache' })
+  var zapisy = {};   // ID utkání, ke kterým máme vlastní zápis (zapas.html)
+  fetch('data/zapisy/index.json', { cache: 'no-cache' })
+    .then(function (r) { return r.ok ? r.json() : []; })
+    .catch(function () { return []; })
+    .then(function (ids) { ids.forEach(function (x) { zapisy[x] = true; }); })
+    .then(function () { return fetch('data/hraci/' + id + '.json', { cache: 'no-cache' }); })
     .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
     .then(vykresli)
     .catch(function () {
@@ -61,7 +65,6 @@
     (d.tymy || []).forEach(function (t) {
       pills.push('<a class="pill pill--link" href="' + TYMY[t] + '"><strong>Družstvo:</strong> TTC Bystřice ' + t + ' →</a>');
     });
-    pills.push('<a class="pill pill--link" href="' + esc(d.stis_url) + '" target="_blank" rel="noopener">Profil na STIS ↗</a>');
     $('h-pills').innerHTML = pills.join('');
 
     var html = '';
@@ -100,7 +103,7 @@
     if (vyhry.length) {
       html += sekce('Nejcennější výhry', tabulka(['Datum', 'Soupeř', 'STR soupeře', 'STR hráče', 'Výsledek', 'Soutěž'],
         vyhry.map(function (w) {
-          return '<tr><td>' + esc(w.datum) + '</td><td><a href="' + STIS + '/hrac-' + esc(w.souper_id) + '" target="_blank" rel="noopener">' + esc(w.souper) + '</a></td>' +
+          return '<tr><td>' + esc(w.datum) + '</td><td>' + esc(w.souper) + '</td>' +
             '<td><strong>' + w.str_soupere + '</strong></td><td>' + w.str_hrace + '</td><td>' + esc(w.vysledek) + '</td><td>' + esc(w.soutez) + '</td></tr>';
         })));
     }
@@ -149,9 +152,11 @@
 
   function radekZapasu(z) {
     var v = vyhral(z.vysledek), dz = z.str_po - z.str_pred;
-    var vysl = z.zapis ? '<a href="' + STIS + esc(z.zapis) + '" target="_blank" rel="noopener" title="Zápis o utkání na STIS">' + esc(z.vysledek) + '</a>' : esc(z.vysledek);
+    // detail zápasu jen u utkání, ke kterým máme vlastní zápis (aktuální sezóna našich družstev)
+    var zid = (/utkani-(\d+)/.exec(z.zapis || '') || [])[1];
+    var vysl = zid && zapisy[zid] ? '<a href="zapas.html?id=' + zid + '" title="Zápis o utkání">' + esc(z.vysledek) + '</a>' : esc(z.vysledek);
     return '<tr class="' + (v > 0 ? 'rozpis--win' : v < 0 ? 'rozpis--loss' : '') + '"><td>' + esc(z.datum) + '</td>' +
-      '<td><a href="' + STIS + '/hrac-' + esc(z.souper_id) + '" target="_blank" rel="noopener">' + esc(z.souper) + '</a><br><small>' + esc(z.souper_druzstvo) + '</small></td>' +
+      '<td>' + esc(z.souper) + '<br><small>' + esc(z.souper_druzstvo) + '</small></td>' +
       '<td><span class="rozpis__skore">' + vysl + '</span> <span class="rozpis__stav rozpis__stav--' + (v > 0 ? 'win">Výhra' : v < 0 ? 'loss">Prohra' : 'draw">–') + '</span></td>' +
       '<td>' + esc(z.druzstvo) + '<br><small>' + esc(z.soutez) + '</small></td>' +
       '<td>' + z.str_po + ' <small class="str-' + trida(dz) + '">(' + znamenko(dz) + ')</small></td>' +
@@ -188,7 +193,7 @@
       var vyber = seznam.filter(function (s) { return !q || s.jmeno.toLowerCase().indexOf(q) >= 0 || (s.druzstvo || '').toLowerCase().indexOf(q) >= 0; });
       $('souperi-tabulka').innerHTML = '<p class="hrac-souhrn">Různých soupeřů: <strong>' + seznam.length + '</strong></p>' +
         tabulka(['Soupeř', 'Zápasy', 'Výhry : prohry', 'STR +/−', 'Naposledy'], vyber.map(function (s) {
-          return '<tr><td><a href="' + STIS + '/hrac-' + esc(s.id) + '" target="_blank" rel="noopener">' + esc(s.jmeno) + '</a><br><small>' + esc(s.druzstvo) + '</small></td>' +
+          return '<tr><td>' + esc(s.jmeno) + '<br><small>' + esc(s.druzstvo) + '</small></td>' +
             '<td>' + (s.v + s.p) + '</td><td><strong>' + s.v + ' : ' + s.p + '</strong></td>' +
             '<td class="str-' + trida(s.str) + '">' + znamenko(s.str) + '</td><td>' + esc(s.posledni) + '</td></tr>';
         }), 'rozpis');

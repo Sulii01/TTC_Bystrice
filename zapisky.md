@@ -296,5 +296,21 @@ po sezónách, historii sezón, všechny zápasy po sezónách a statistiku soup
 
 ---
 
+## 11. Zápis o utkání (zapas.html)
+
+Výsledky zápasů (karty „Výsledky posledních zápasů“ na hlavní stránce, skóre v rozpisu
+na stránkách týmů, výsledky na stránce hráče) vedou na **`zapas.html?id=ID`** — vlastní
+zápis o utkání na webu: celkový výsledek (body, sady, míčky, vítěz), místo a čas,
+všechny hry se sety a průběžným skóre a statistika jednotlivých hráčů.
+
+- Zápisy stahuje `aktualizovat_data.py` pro všechna odehraná utkání našich družstev
+  do `data/zapisy/ID.json` (parsování je v `stis_zapisy.py`); `data/zapisy/index.json`
+  je seznam dostupných zápisů.
+- Zápisy starší než 14 dní se znovu nestahují (už se nemění).
+- Odkazy na STIS zůstávají jen na stránkách týmů (tabulka, rozpis, sestava) a u tlačítka
+  „Živé rozlosování na STIS“.
+
+---
+
 *Tento soubor si klidně upravujte a doplňujte — je jen pro vaši (a moji budoucí)
 orientaci ve webu, žádná část webu se podle něj automaticky negeneruje.*
