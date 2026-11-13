@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<title>TTC Bystřice — 2× A5 na A4 na šířku</title>
+<!--
+  Dva listy A5 (a5-stolek.html) vedle sebe na A4 na šířku, k tisku na běžné tiskárně.
+  Tiskárna neumí tisknout až do kraje (nepotiskne cca 3–5 mm), proto je kolem 5 mm okraj
+  a listy jsou o 5 % zmenšené. Stříhá se uprostřed v mezeře mezi listy.
+  Hotové PDF: tisk/a4-dva-listy.pdf — tisknout „Skutečná velikost“ / 100 %.
+-->
+<style>
+  @page{ size: 297mm 210mm; margin: 0; }
+  html, body{ margin: 0; padding: 0; }
+  .a4{ position: relative; width: 297mm; height: 210mm; overflow: hidden; background: #fff; }
+  .a5{
+    position: absolute; top: 5mm; width: 148mm; height: 210mm; border: 0;
+    transform: scale(.952); transform-origin: top left;
+  }
+  .a5.l{ left: 5mm; }
+  .a5.r{ left: calc(5mm + 140.9mm + 5.2mm); }
+</style>
+</head>
+<body>
+  <div class="a4">
+    <iframe class="a5 l" src="a5-stolek.html" scrolling="no"></iframe>
+    <iframe class="a5 r" src="a5-stolek.html" scrolling="no"></iframe>
+  </div>
+</body>
+</html>
