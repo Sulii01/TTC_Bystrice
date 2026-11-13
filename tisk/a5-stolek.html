@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<title>TTC Bystřice — A5 ke stolům (QR kód na web)</title>
+<!--
+  Tisková předloha A5 (148 × 210 mm) s QR kódem na web.
+  Hotové PDF k tisku: tisk/a5-stolek.pdf. Tento soubor je jen zdroj, kdyby bylo potřeba
+  text upravit — otevřete ho v prohlížeči a vytiskněte na A5 bez okrajů (Tisk → Okraje: Žádné).
+-->
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  @page{ size: 148mm 210mm; margin: 0; }
+  :root{ --yellow:#ffe600; --black:#000; }
+  *{ box-sizing: border-box; }
+  html, body{ margin: 0; padding: 0; }
+  body{ font-family: 'Inter', Arial, sans-serif; color: var(--black); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .list{
+    width: 148mm; height: 210mm; overflow: hidden; background: #fff;
+    display: flex; flex-direction: column;
+  }
+  /* hlavička */
+  .hlava{
+    background: var(--black); color: #fff; padding: 7.5mm 10mm 7mm;
+    display: flex; align-items: center; gap: 6mm; border-bottom: 2.2mm solid var(--yellow);
+  }
+  .hlava img{ height: 27mm; width: auto; flex-shrink: 0; }
+  .hlava h1{
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 30pt; line-height: .95;
+    text-transform: uppercase; margin: 0; letter-spacing: .01em;
+  }
+  .hlava h1 span{ color: var(--yellow); }
+  .hlava p{
+    margin: 2.5mm 0 0; font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 8.5pt;
+    letter-spacing: .22em; text-transform: uppercase; color: var(--yellow);
+  }
+  /* střed */
+  .stred{ flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 5mm 10mm 4mm; text-align: center; }
+  .stred h2{
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 19pt; line-height: 1.05;
+    text-transform: uppercase; margin: 0;
+  }
+  .stred h2 em{ font-style: normal; background: var(--yellow); padding: .4mm 2mm; display: inline-block; margin-top: 1.4mm; line-height: 1.1; }
+  .stred .navod{ margin: 2.4mm 0 5mm; font-size: 9.5pt; color: #444; }
+  .qr{
+    background: var(--yellow); border-radius: 6mm; padding: 4.5mm;
+  }
+  .qr img{ display: block; width: 86mm; height: 86mm; border-radius: 2mm; }
+  .co{
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 1.6mm 4mm;
+    margin-top: 5mm; font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 10pt;
+    text-transform: uppercase; letter-spacing: .06em;
+  }
+  .co span::before{
+    content: ""; display: inline-block; width: 2mm; height: 2mm; border-radius: 50%;
+    background: var(--yellow); box-shadow: 0 0 0 .35mm var(--black); margin-right: 1.6mm; vertical-align: .3mm;
+  }
+  /* pata */
+  .pata{
+    background: var(--black); color: #fff; padding: 4.5mm 10mm; text-align: center;
+    border-top: 2.2mm solid var(--yellow);
+  }
+  .pata strong{ display: block; font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 12.5pt; color: var(--yellow); letter-spacing: .02em; }
+  .pata small{ font-size: 7.5pt; color: #bbb; letter-spacing: .04em; }
+</style>
+</head>
+<body>
+  <div class="list">
+    <header class="hlava">
+      <img src="../images/Logo.png" alt="Logo TTC Bystřice">
+      <div>
+        <h1>TTC <span>Bystřice</span></h1>
+        <p>Oddíl stolního tenisu · od 2007</p>
+      </div>
+    </header>
+
+    <main class="stred">
+      <h2>Výsledky a zápasy<br><em>v mobilu</em></h2>
+      <p class="navod">Namiřte fotoaparát telefonu na QR kód a otevřete naše stránky.</p>
+      <div class="qr"><img src="qr-kod-web.svg" alt="QR kód na web TTC Bystřice"></div>
+      <div class="co">
+        <span>Výsledky</span><span>Tabulky</span><span>Rozpis</span><span>Hráči</span><span>Fotogalerie</span>
+      </div>
+    </main>
+
+    <footer class="pata">
+      <strong>sulii01.github.io/TTC_Bystrice</strong>
+      <small>Bystřice nad Olší · ttc.bystrice@seznam.cz</small>
+    </footer>
+  </div>
+</body>
+</html>
