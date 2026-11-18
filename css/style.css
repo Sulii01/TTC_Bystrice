@@ -861,3 +861,6 @@ table.tabulka tr.tabulka--nas td{ color: var(--yellow); font-weight: 600; }
 #aktuality .grid{ grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
 /* hlavička týmu / hráče: jméno a štítky vedle fotky, ne pod ní */
 .team-hero__info{ flex: 1 1 320px; min-width: 0; }
+
+/* pole pro text v administraci: zvětšit jen do výšky, nikdy přes okraj formuláře */
+.admin__form textarea{ resize: vertical; max-width: 100%; min-height: 140px; }

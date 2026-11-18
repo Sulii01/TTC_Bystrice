@@ -10,7 +10,21 @@
     return;
   }
 
-  var sb = window.supabase.createClient(cfg.url, cfg.key);
+  // Bezpečnost přihlášení:
+  //  - přihlášení se pamatuje jen v otevřené kartě prohlížeče (sessionStorage) —
+  //    po zavření karty / prohlížeče je potřeba se přihlásit znovu;
+  //  - po NECINNOST_MIN minutách bez práce (myš, klávesnice, dotyk) se administrace sama odhlásí.
+  var NECINNOST_MIN = 30;
+  var KLIC_AKTIVITA = 'ttc-admin-posledni-aktivita';
+  try {   // úklid: starší verze administrace ukládala přihlášení natrvalo do localStorage
+    Object.keys(localStorage).forEach(function (k) {
+      if (/^sb-.*-auth-token/.test(k)) localStorage.removeItem(k);
+    });
+  } catch (e) { /* prohlížeč úložiště nepovoluje — nevadí */ }
+
+  var sb = window.supabase.createClient(cfg.url, cfg.key, {
+    auth: { storage: window.sessionStorage, persistSession: true, autoRefreshToken: true }
+  });
   var ja = null;        // { id, email, role, jmeno }
   var aktuality = [];   // načtené aktuality (pro úpravy)
   var upravujeId = null;
@@ -56,6 +70,31 @@
     return 'Chyba: ' + m;
   }
 
+  // ---------- hlídání nečinnosti ----------
+  function aktivita(kdy) {
+    try { sessionStorage.setItem(KLIC_AKTIVITA, String(kdy || Date.now())); } catch (e) {}
+  }
+  function posledniAktivita() {
+    try { return parseInt(sessionStorage.getItem(KLIC_AKTIVITA) || '0', 10); } catch (e) { return 0; }
+  }
+  function vyprselo() { return Date.now() - posledniAktivita() > NECINNOST_MIN * 60 * 1000; }
+  function odhlasitPoNecinnosti() {
+    return sb.auth.signOut({ scope: 'local' }).then(function () {
+      ja = null;
+      ukaz(false);
+      zprava('login-msg', 'Z bezpečnostních důvodů jste byli odhlášeni po ' + NECINNOST_MIN + ' minutách nečinnosti. Přihlaste se prosím znovu.');
+    });
+  }
+  var posledniZapis = 0;
+  ['mousemove', 'mousedown', 'keydown', 'scroll', 'touchstart'].forEach(function (udalost) {
+    document.addEventListener(udalost, function () {
+      if (!ja) return;
+      var ted = Date.now();
+      if (ted - posledniZapis > 10000) { posledniZapis = ted; aktivita(ted); }   // stačí jednou za 10 s
+    }, { passive: true });
+  });
+  setInterval(function () { if (ja && vyprselo()) odhlasitPoNecinnosti(); }, 30000);
+
   // ---------- přihlášení / odhlášení ----------
   function ukaz(prihlasen) {
     $('nacitani').hidden = true;
@@ -85,6 +124,7 @@
 
   sb.auth.getSession().then(function (res) {
     var s = res.data && res.data.session;
+    if (s && vyprselo()) return odhlasitPoNecinnosti();
     if (s) poPrihlaseni(s.user).catch(function (e) { ukaz(false); zprava('login-msg', cesky(e)); });
     else ukaz(false);
   });
@@ -98,6 +138,7 @@
         if (res.error) throw res.error;
         f.heslo.value = '';
         zprava('login-msg', '');
+        aktivita();
         return poPrihlaseni(res.data.user);
       })
       .catch(function (err) { zprava('login-msg', cesky(err)); });

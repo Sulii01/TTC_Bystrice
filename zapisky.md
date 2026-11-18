@@ -260,6 +260,12 @@ Oprávnění hlídá přímo databáze (soubor `supabase/schema.sql`), ne jen we
 - Kdo má jakou roli:
   `select u.email, r.role, r.jmeno from public.role_uzivatelu r join auth.users u on u.id = r.user_id;`
 
+### Bezpečnost přihlášení
+- Přihlášení do administrace platí jen v otevřené kartě prohlížeče — po zavření
+  karty nebo prohlížeče je potřeba se přihlásit znovu.
+- Po **30 minutách nečinnosti** (bez pohybu myši, psaní nebo dotyku) se administrace
+  sama odhlásí. Délku jde změnit v `js/admin.js` (`NECINNOST_MIN`).
+
 ### Důležité nastavení (udělat jednou)
 - Authentication → **Sign In / Providers** → vypnout **Allow new users to sign up**
   (jinak by si účet mohl založit kdokoliv; bez role by sice nic nesměl, ale nechceme to).
